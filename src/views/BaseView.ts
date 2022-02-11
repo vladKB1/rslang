@@ -10,52 +10,55 @@ export class BaseView {
   app: HTMLElement;
 
   constructor() {
-    this.body = this.getElement('body') as HTMLElement;
+    this.body = this.getElement('body');
     this.body.innerHTML = '';
     this.body.append(this.renderBasePage());
 
-    this.app = this.getElement('#root') as HTMLElement;
+    this.app = this.getElement('#root');
   }
 
-  createElement(tag: string, className?: string): Element {
+  createElement(tag: string, className?: string): HTMLElement {
     const element = document.createElement(tag);
     if (className) element.classList.add(className);
-
     return element;
   }
 
   getElement(selector: string): HTMLElement {
     const element = document.querySelector(selector);
-
     return element as HTMLElement;
   }
 
-  createLogo(className: string, href: string, title: string): HTMLElement {
+  createLogo(className: string, href: string, title?: string): HTMLElement {
     const logo = this.createElement('a', className) as HTMLAnchorElement;
     logo.href = href;
 
-    const img = this.createElement('div', `${className}-img`) as HTMLElement;
-    const txt = this.createElement('span', `${className}-txt`) as HTMLSpanElement;
-    txt.textContent = title;
+    const img = this.createElement('div', `${className}-img`);
+    logo.append(img);
 
-    logo.append(img, txt);
-    return logo as HTMLElement;
+    if (title != undefined) {
+      const txt = this.createElement('span', `${className}-txt`);
+      txt.textContent = title;
+      logo.append(txt);
+    }
+
+    return logo;
   }
 
   createMenu(className: string, items: MenuItem[]): HTMLElement {
     const menu = this.createElement('ul', className);
 
     items.forEach((item) => {
-      const li = this.createElement('li') as HTMLLIElement;
+      const li = this.createElement('li');
       const div = this.createElement('div');
 
-      const a = this.createElement('a') as HTMLAnchorElement;
+      const a = this.createElement('a');
       a.id = item.id;
       a.textContent = item.itemName;
 
       div.append(a);
+
       if (item.nestedMenu) {
-        const nestedMenu = this.createMenu(`${item.id}-menu`, item.nestedMenu) as HTMLElement;
+        const nestedMenu = this.createMenu(`${item.id}-menu`, item.nestedMenu);
         nestedMenu.classList.add('hidden');
         div.append(nestedMenu);
       }
@@ -64,7 +67,7 @@ export class BaseView {
       menu.append(li);
     });
 
-    return menu as HTMLElement;
+    return menu;
   }
 
   createHeader(): HTMLElement {
@@ -108,7 +111,33 @@ export class BaseView {
 
     header.append(div, logInButton);
 
-    return header as HTMLElement;
+    return header;
+  }
+
+  createFooter(): HTMLElement {
+    const footer = this.createElement('footer', 'footer');
+
+    const copyright = this.createElement('div', 'copyright');
+    const span = this.createElement('span');
+    span.textContent = '© 2022 RS LANG';
+    copyright.append(span);
+
+    const gitHub = this.createElement('div', 'github');
+    const team = ['vladKB1', 'Tsvetinskaya-L', 'AntonKos'];
+    gitHub.append(
+      ...team.map((teammate) => {
+        const a = this.createElement('a') as HTMLAnchorElement;
+        a.textContent = teammate;
+        a.href = `https://github.com/${teammate}`;
+        return a;
+      }),
+    );
+
+    const logo = this.createLogo('rs-school-logo', 'https://rs.school/js/');
+
+    footer.append(copyright, gitHub, logo);
+
+    return footer;
   }
 
   renderBasePage(): HTMLElement {
@@ -116,7 +145,9 @@ export class BaseView {
     BasePage.id = 'root';
 
     BasePage.append(this.createHeader());
+    BasePage.append(this.createElement('main', 'main'));
+    BasePage.append(this.createFooter());
 
-    return BasePage as HTMLElement;
+    return BasePage;
   }
 }
