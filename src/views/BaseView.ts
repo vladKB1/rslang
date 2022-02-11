@@ -9,12 +9,24 @@ export class BaseView {
 
   app: HTMLElement;
 
+  header: HTMLElement;
+
+  mainMenu: HTMLElement;
+
+  main: HTMLElement;
+
+  footer: HTMLElement;
+
   constructor() {
     this.body = this.getElement('body');
     this.body.innerHTML = '';
     this.body.append(this.renderBasePage());
 
     this.app = this.getElement('#root');
+    this.header = this.getElement('header');
+    this.mainMenu = this.getElement('main-menu');
+    this.main = this.getElement('main');
+    this.footer = this.getElement('footer');
   }
 
   createElement(tag: string, className?: string): HTMLElement {
@@ -51,8 +63,9 @@ export class BaseView {
       const li = this.createElement('li');
       const div = this.createElement('div');
 
-      const a = this.createElement('a');
+      const a = this.createElement('a') as HTMLAnchorElement;
       a.id = item.id;
+      a.href = `#${item.id}`;
       a.textContent = item.itemName;
 
       div.append(a);
@@ -99,6 +112,11 @@ export class BaseView {
               nestedMenu: null,
             },
           ],
+        },
+        {
+          itemName: 'О команде',
+          id: 'aboutUs',
+          nestedMenu: null,
         },
       ]),
     );

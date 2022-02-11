@@ -1,7 +1,8 @@
-import { BaseController } from './controllers/BaseController';
-import { BaseModel } from './models/BaseModel';
 import './styles/main.scss';
-import { BaseView } from './views/BaseView';
 
-const app = new BaseController(new BaseModel(), new BaseView());
+import { MainPageModel } from './models/MainPageModel';
+import { MainPageView } from './views/MainPageView';
+import { MainPageController } from './controllers/MainPageController';
+
+const app = new MainPageController(new MainPageModel(), new MainPageView());
 console.log(app);
