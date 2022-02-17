@@ -1,0 +1,43 @@
+.mini-games-container {
+  @include flex($direction: column);
+
+  .mini-games-title {
+    margin-bottom: 20px;
+  }
+
+  .mini-games-description {
+    margin-bottom: 40px;
+  }
+
+  .games {
+    @include flex(space-around);
+    flex-wrap: wrap;
+    width: 100%;
+    
+  } 
+}
+
+.game-card {
+  @include flex($direction: column);
+  width: 35vh;
+  height: 35vh;
+  border-radius: 15px;  
+
+  .game-card-title {
+    color: white;
+    margin: 10px 0;
+  }
+
+  .game-card-img {
+    overflow: hidden;
+    max-width: 70%;
+  }
+}
+
+.sprint {
+  background-color: $game-sprint-background;
+}
+
+.audio-call {
+  background-color: $game-audio-call-background;
+}

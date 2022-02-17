@@ -23,7 +23,6 @@ module.exports = ({ development }) => ({
   output: {
     filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, 'dist'),
-    assetModuleFilename: 'assets/[hash][ext]',
   },
   module: {
     rules: [
@@ -72,7 +71,18 @@ module.exports = ({ development }) => ({
     new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' }),
     new HtmlWebpackPlugin({ template: './src/index.html' }),
     new CopyWebpackPlugin({
-      patterns: [{ from: 'public', to: path.resolve(__dirname, 'dist'), noErrorOnMissing: true }],
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'src/favicon.ico'),
+          to: path.resolve(__dirname, 'dist'),
+          noErrorOnMissing: true,
+        },
+        {
+          from: path.resolve(__dirname, 'src/assets/images'),
+          to: path.resolve(__dirname, 'dist'),
+          noErrorOnMissing: true,
+        },
+      ],
     }),
     new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
   ],

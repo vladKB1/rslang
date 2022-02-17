@@ -1,0 +1,40 @@
+.about-us-container {
+  padding: 40px 30px;
+
+  .about-us-title {  
+    text-align: center;  
+    margin-bottom: 40px;
+  }
+
+  .about-us {
+    @include flex(space-around);
+
+    .teammate-container {
+      @include flex($direction: column);
+      width: 322px;
+      min-height: 338px;
+
+      background-color: $not-active-nav;
+      border-radius: 15px;
+      padding: 20px;
+    }
+
+    .teammate-img {
+      width: max-content;
+      height: max-content;  
+      margin-bottom: 10px;       
+    }
+
+    .teammate-name {
+      font-size: 30px;  
+      margin-bottom: 10px;  
+      cursor: pointer;  
+    }
+
+    .teammate-about {
+      color: black;
+      font-size: 24px;
+      text-align: center;
+    }
+  }
+}
