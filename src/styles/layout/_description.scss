@@ -1,0 +1,60 @@
+.rslang-description {
+  position: relative;
+  margin: 0 auto;
+  max-width: 1440px;
+
+  overflow: hidden;
+
+  .description-background-img {
+    position: absolute;    
+    z-index: 0;
+  }
+}
+
+.description-container {
+  position: relative;
+  @include flex(space-between);
+  padding: 220px 0 413px 80px;
+  z-index: 1;
+
+  .text {
+    .main-title {
+      width: 24.3%;
+      font-size: $description-title-font-size;   
+      line-height: 85px;
+    }
+
+    .main-description {
+      width: 37.1%;
+      margin: 25px 0 50px 0;      
+    }
+
+    .log-in-button {
+      font-size: $description-button-font-size;
+      text-align: center;
+    }
+  }
+}
+
+
+
+
+.description-text-book-container {
+  position: relative;
+  @include flex(space-between);
+  padding: 20px 30px 40px 30px;  
+
+  .text-book-img {
+    max-width: 45%;
+  }
+
+  .description-text-book {   
+    @include flex(space-between, flex-start, column);         
+    max-width: 45%;        
+
+    .text-book-title {
+      font-size: $description-text-book-title-font-size;
+      margin-bottom: 20px;
+    }
+  }
+}

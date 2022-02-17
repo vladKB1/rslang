@@ -1,3 +1,5 @@
+import rsSchoolLogo from '../assets/images/svg/rs_school_js.svg';
+
 export type MenuItem = {
   itemName: string;
   id: string;
@@ -29,10 +31,17 @@ export class BaseView {
     this.footer = this.getElement('footer');
   }
 
-  createElement(tag: string, className?: string): HTMLElement {
+  createElement(tag: string, ...classNames: string[]): HTMLElement {
     const element = document.createElement(tag);
-    if (className) element.classList.add(className);
+    if (classNames?.length != 0) element.classList.add(...(classNames as string[]));
     return element;
+  }
+
+  createImage(src: string, alt: string, ...classNames: string[]): HTMLImageElement {
+    const img = this.createElement('img', ...classNames) as HTMLImageElement;
+    img.src = src;
+    img.alt = alt;
+    return img;
   }
 
   getElement(selector: string): HTMLElement {
@@ -44,9 +53,6 @@ export class BaseView {
     const logo = this.createElement('a', className) as HTMLAnchorElement;
     logo.href = href;
 
-    const img = this.createElement('div', `${className}-img`);
-    logo.append(img);
-
     if (title != undefined) {
       const txt = this.createElement('span', `${className}-txt`);
       txt.textContent = title;
@@ -57,26 +63,26 @@ export class BaseView {
   }
 
   createMenu(className: string, items: MenuItem[]): HTMLElement {
-    const menu = this.createElement('ul', className);
+    const menu = this.createElement('ul', 'navigation', className);
 
     items.forEach((item) => {
       const li = this.createElement('li');
-      const div = this.createElement('div');
+      const boarder = this.createElement('div', 'nav-item');
 
       const a = this.createElement('a') as HTMLAnchorElement;
       a.id = item.id;
       a.href = `#${item.id}`;
       a.textContent = item.itemName;
 
-      div.append(a);
+      boarder.append(a);
 
       if (item.nestedMenu) {
         const nestedMenu = this.createMenu(`${item.id}-menu`, item.nestedMenu);
-        nestedMenu.classList.add('hidden');
-        div.append(nestedMenu);
+        nestedMenu.classList.add('sub-nav', 'hidden');
+        boarder.append(nestedMenu);
       }
 
-      li.append(div);
+      li.append(boarder);
       menu.append(li);
     });
 
@@ -86,6 +92,7 @@ export class BaseView {
   createHeader(): HTMLElement {
     const header = this.createElement('header', 'header');
     header.id = 'header';
+    const container = this.createElement('div', 'container', 'header-container');
 
     const logo = this.createLogo('main-logo', '#header', 'RS Lang');
 
@@ -121,19 +128,18 @@ export class BaseView {
       ]),
     );
 
-    const logInButton = this.createElement('button', 'log-in-button');
+    const logInButton = this.createElement('button', 'button', 'log-in-button');
     logInButton.textContent = 'Войти';
 
-    const div = this.createElement('div');
-    div.append(logo, menu);
-
-    header.append(div, logInButton);
+    container.append(logo, menu, logInButton);
+    header.append(container);
 
     return header;
   }
 
   createFooter(): HTMLElement {
     const footer = this.createElement('footer', 'footer');
+    const container = this.createElement('div', 'container', 'footer-container');
 
     const copyright = this.createElement('div', 'copyright');
     const span = this.createElement('span');
@@ -151,9 +157,13 @@ export class BaseView {
       }),
     );
 
-    const logo = this.createLogo('rs-school-logo', 'https://rs.school/js/');
+    const logo = this.createElement('a', 'rs-school-logo') as HTMLAnchorElement;
+    logo.href = 'https://rs.school/js/';
+    const img = this.createImage(rsSchoolLogo, 'rs-school', 'rs-school-logo-img');
+    logo.append(img);
 
-    footer.append(copyright, gitHub, logo);
+    container.append(copyright, gitHub, logo);
+    footer.append(container);
 
     return footer;
   }
