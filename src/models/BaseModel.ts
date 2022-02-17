@@ -1,3 +1,5 @@
 export class BaseModel {
-  token!: string;
+  token = '';
+
+  isAuthorized = false;
 }

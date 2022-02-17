@@ -16,6 +16,8 @@
     "project": "./tsconfig.json"
   },
   "plugins": ["@typescript-eslint", "prettier"],
-  "rules": {},
+  "rules": {
+    "@typescript-eslint/no-useless-constructor": "off"
+  },
   "ignorePatterns": ["*config.js"]
 }

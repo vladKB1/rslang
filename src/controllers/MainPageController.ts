@@ -5,7 +5,5 @@ import { BaseController } from './BaseController';
 export class MainPageController extends BaseController {
   constructor(model: MainPageModel, view: MainPageView) {
     super(model, view);
-
-    console.log('');
   }
 }

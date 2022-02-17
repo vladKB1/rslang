@@ -15,12 +15,12 @@ export type TeamMate = {
 };
 
 export class MainPageView extends BaseView {
-  constructor() {
-    super();
-    this.renderMainPage();
+  constructor(isAuthorized: boolean) {
+    super(isAuthorized);
+    this.renderMainPage(isAuthorized);
   }
 
-  createSectionRsLang(): HTMLElement {
+  createSectionRsLang(isAuthorized: boolean): HTMLElement {
     const container = this.createElement('div', 'container', 'description-container');
 
     const text = this.createElement('div', 'text');
@@ -29,12 +29,16 @@ export class MainPageView extends BaseView {
     const description = this.createElement('p', 'description', 'main-description');
     description.textContent =
       'Lorem ipsum dolor sit amet consectetur adipiscing elit sollicitudin condimentum turpis, diam fermentum nibh volutpat egestas ac vestibulum.';
-    const logInButton = this.createElement('button', 'button', 'log-in-button');
-    logInButton.textContent = 'Войти';
 
-    text.append(title, description, logInButton);
+    text.append(title, description);
+
+    if (!isAuthorized) {
+      const logInButton = this.createElement('button', 'button', 'log-in-button');
+      logInButton.textContent = 'Войти';
+      text.append(logInButton);
+    }
+
     container.append(text);
-
     return container;
   }
 
@@ -148,11 +152,11 @@ export class MainPageView extends BaseView {
     return container;
   }
 
-  renderMainPage(): void {
+  renderMainPage(isAuthorized: boolean): void {
     const sectionRsLang = this.createElement('section', 'rslang-description');
     const backgroundImage = this.createImage(backgroundImageSource, '', 'description-background-img');
 
-    sectionRsLang.append(backgroundImage, this.createSectionRsLang());
+    sectionRsLang.append(backgroundImage, this.createSectionRsLang(isAuthorized));
     this.main.append(sectionRsLang);
 
     const sectionTextBook = this.createElement('section', 'section-text-book');

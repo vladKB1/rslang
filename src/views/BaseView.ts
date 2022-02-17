@@ -19,10 +19,10 @@ export class BaseView {
 
   footer: HTMLElement;
 
-  constructor() {
+  constructor(isAuthorized: boolean) {
     this.body = this.getElement('body');
     this.body.innerHTML = '';
-    this.body.append(this.renderBasePage());
+    this.body.append(this.renderBasePage(isAuthorized));
 
     this.app = this.getElement('#root');
     this.header = this.getElement('header');
@@ -33,7 +33,7 @@ export class BaseView {
 
   createElement(tag: string, ...classNames: string[]): HTMLElement {
     const element = document.createElement(tag);
-    if (classNames?.length != 0) element.classList.add(...(classNames as string[]));
+    if (classNames?.length) element.classList.add(...(classNames as string[]));
     return element;
   }
 
@@ -89,7 +89,7 @@ export class BaseView {
     return menu;
   }
 
-  createHeader(): HTMLElement {
+  createHeader(isAuthorized: boolean): HTMLElement {
     const header = this.createElement('header', 'header');
     header.id = 'header';
     const container = this.createElement('div', 'container', 'header-container');
@@ -102,7 +102,15 @@ export class BaseView {
         {
           itemName: 'Учебник',
           id: 'textbook',
-          nestedMenu: null,
+          nestedMenu: isAuthorized
+            ? [
+                {
+                  itemName: 'Сложные слова',
+                  id: 'text-book-difficult-words',
+                  nestedMenu: null,
+                },
+              ]
+            : null,
         },
         {
           itemName: 'Мини-игры',
@@ -128,10 +136,14 @@ export class BaseView {
       ]),
     );
 
-    const logInButton = this.createElement('button', 'button', 'log-in-button');
-    logInButton.textContent = 'Войти';
+    container.append(logo, menu);
 
-    container.append(logo, menu, logInButton);
+    if (!isAuthorized) {
+      const logInButton = this.createElement('button', 'button', 'log-in-button');
+      logInButton.textContent = 'Войти';
+      container.append(logInButton);
+    }
+
     header.append(container);
 
     return header;
@@ -168,11 +180,11 @@ export class BaseView {
     return footer;
   }
 
-  renderBasePage(): HTMLElement {
+  renderBasePage(isAuthorized: boolean): HTMLElement {
     const BasePage = this.createElement('div');
     BasePage.id = 'root';
 
-    BasePage.append(this.createHeader());
+    BasePage.append(this.createHeader(isAuthorized));
     BasePage.append(this.createElement('main', 'main'));
     BasePage.append(this.createFooter());
 
