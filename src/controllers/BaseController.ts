@@ -9,5 +9,11 @@ export class BaseController {
   constructor(model: BaseModel, view: BaseView) {
     this.model = model;
     this.view = view;
+
+    this.view.bindRenderAuthorizationPopUp(this.handleRenderAuthorizationPopUp);
   }
+
+  handleRenderAuthorizationPopUp = () => {
+    this.view.renderAuthorizationPopUp();
+  };
 }

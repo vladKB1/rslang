@@ -18,7 +18,6 @@ export class MainPageView extends BaseView {
   constructor(isAuthorized: boolean) {
     super(isAuthorized);
     this.renderMainPage(isAuthorized);
-    this.body.append(this.createAuthorizationPopUp());
   }
 
   createSectionRsLang(isAuthorized: boolean): HTMLElement {

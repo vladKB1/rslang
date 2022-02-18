@@ -192,12 +192,31 @@ export class BaseView {
     return BasePage;
   }
 
+  closePopUp(popUp: HTMLElement) {
+    popUp.classList.add('hidden');
+    popUp.remove();
+  }
+
   CreatePopUp(className: string): HTMLElement {
-    const popUp = this.createElement('div', 'popup', className);
+    const popUp = this.createElement('div', 'popup', className, 'hidden');
+
+    popUp.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      if (!target?.closest('.popup__content')) {
+        this.closePopUp(target?.closest('.popup') as HTMLElement);
+      }
+    });
+
     const body = this.createElement('div', 'popup__body');
     const content = this.createElement('div', 'popup__content');
     const close = this.createElement('a', 'popup__close', 'authorization-popup__close') as HTMLAnchorElement;
+    close.href = `#header`;
     close.textContent = 'X';
+
+    close.addEventListener('click', (event) => {
+      this.closePopUp(close.closest('.popup') as HTMLElement);
+      event.preventDefault();
+    });
 
     content.append(close);
     body.append(content);
@@ -246,15 +265,25 @@ export class BaseView {
     return authorizationForm;
   }
 
-  createAuthorizationPopUp(): HTMLElement {
-    const popup = this.CreatePopUp('authorization-popup');
-    const content = popup.getElementsByClassName('popup__content')[0];
+  renderAuthorizationPopUp() {
+    const popUp = this.CreatePopUp('authorization-popup');
+    const content = popUp.getElementsByClassName('popup__content')[0];
 
     const image = this.createImage(signInImg, 'sign-in-image', 'sign-in-image');
     const AuthorizationForm = this.createAuthorizationForm();
 
     content.append(image, AuthorizationForm);
 
-    return popup;
+    this.body.append(popUp);
+
+    popUp.classList.remove('hidden');
+  }
+
+  bindRenderAuthorizationPopUp(handler: () => void) {
+    this.header?.addEventListener('click', (event) => {
+      if ((event.target as HTMLElement).className === 'button log-in-button') {
+        handler();
+      }
+    });
   }
 }
