@@ -18,6 +18,7 @@ export class MainPageView extends BaseView {
   constructor(isAuthorized: boolean) {
     super(isAuthorized);
     this.renderMainPage(isAuthorized);
+    this.body.append(this.createAuthorizationPopUp());
   }
 
   createSectionRsLang(isAuthorized: boolean): HTMLElement {
@@ -77,13 +78,13 @@ export class MainPageView extends BaseView {
 
     const sprintGame = this.createElement('div', 'game-card', 'sprint');
     let title = this.createElement('h2', 'game-card-title');
-    let image = this.createImage(sprintImg, 'sprintImg', 'game-card-img', 'sprint-img');
+    let image = this.createImage(sprintImg, 'sprintImg', 'game-card-img', 'sprint__img');
     title.textContent = 'Спринт';
     sprintGame.append(title, image);
 
     const audioGame = this.createElement('div', 'game-card', 'audio-call');
     title = this.createElement('h2', 'game-card-title');
-    image = this.createImage(audioCallImg, 'audioCallImg', 'game-card-img', 'audio-call-img');
+    image = this.createImage(audioCallImg, 'audioCallImg', 'game-card-img', 'audio-call__img');
     title.textContent = 'Аудиовызов';
     audioGame.append(title, image);
 

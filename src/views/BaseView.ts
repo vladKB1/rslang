@@ -1,4 +1,5 @@
 import rsSchoolLogo from '../assets/images/svg/rs_school_js.svg';
+import signInImg from '../assets/images/svg/sign-in-image.svg';
 
 export type MenuItem = {
   itemName: string;
@@ -189,5 +190,71 @@ export class BaseView {
     BasePage.append(this.createFooter());
 
     return BasePage;
+  }
+
+  CreatePopUp(className: string): HTMLElement {
+    const popUp = this.createElement('div', 'popup', className);
+    const body = this.createElement('div', 'popup__body');
+    const content = this.createElement('div', 'popup__content');
+    const close = this.createElement('a', 'popup__close', 'authorization-popup__close') as HTMLAnchorElement;
+    close.textContent = 'X';
+
+    content.append(close);
+    body.append(content);
+    popUp.append(body);
+
+    return popUp;
+  }
+
+  createAuthorizationForm(): HTMLElement {
+    const authorizationForm = this.createElement('form', 'authorization-form');
+
+    const title = this.createElement('h1', 'title', 'authorization-form__title');
+    title.textContent = 'Добро пожаловать!';
+
+    const email = this.createElement('div', 'authorization-form__input-container', 'email');
+    const emailInput = this.createElement('input', 'authorization-form__input', 'email__input') as HTMLInputElement;
+    emailInput.type = 'text';
+    emailInput.name = 'email';
+    const emailPlaceHolder = this.createElement('span', 'email-place-older', 'focus-place-holder');
+    emailPlaceHolder.setAttribute('data-placeholder', 'Почта');
+    email.append(emailInput, emailPlaceHolder);
+
+    const password = this.createElement('div', 'authorization-form__input-container', 'password');
+    const passwordInput = this.createElement(
+      'input',
+      'authorization-form__input',
+      'password__input',
+    ) as HTMLInputElement;
+    passwordInput.type = 'password';
+    passwordInput.name = 'password';
+    const passwordPlaceHolder = this.createElement('span', 'password-place-holder', 'focus-place-holder');
+    passwordPlaceHolder.setAttribute('data-placeholder', 'Пароль');
+    password.append(passwordInput, passwordPlaceHolder);
+
+    const logInButton = this.createElement('button', 'button', 'authorization-form__log-in-button');
+    logInButton.textContent = 'Войти';
+
+    const singUpContainer = this.createElement('div', 'sing-up-container');
+    const description = this.createElement('span', 'description');
+    description.textContent = 'Нет аккаунта? ';
+    const singUpButton = this.createElement('a', 'sing-up-container__button');
+    singUpButton.textContent = 'Регистрация';
+    singUpContainer.append(description, singUpButton);
+
+    authorizationForm.append(title, email, password, logInButton, singUpContainer);
+    return authorizationForm;
+  }
+
+  createAuthorizationPopUp(): HTMLElement {
+    const popup = this.CreatePopUp('authorization-popup');
+    const content = popup.getElementsByClassName('popup__content')[0];
+
+    const image = this.createImage(signInImg, 'sign-in-image', 'sign-in-image');
+    const AuthorizationForm = this.createAuthorizationForm();
+
+    content.append(image, AuthorizationForm);
+
+    return popup;
   }
 }

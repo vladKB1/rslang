@@ -35,3 +35,5 @@ export const signIn = async (user: User) => {
 
   return rawResponse;
 };
+
+//export const makeRequest = async (func: requestFunction) => {};
