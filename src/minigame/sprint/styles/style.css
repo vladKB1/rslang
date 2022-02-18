@@ -1,0 +1,238 @@
+.hide {
+  display: none !important;
+}
+
+body {
+  background-image: url('../images/background-1.jpg');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.sprint__header {
+  display: flex;
+  justify-content: space-around;
+  height: 80px;
+  margin-top: 10px;
+}
+
+.sprint__header__button.sprint__sound {
+  border: none;
+  background: none;
+  width: 50px;
+  background-image: url('../images/icons/soundOn.svg');
+  background-repeat: no-repeat;
+}
+
+.sprint__header__button.sprint__home {
+  border: none;
+  background: none;
+  width: 50px;
+  background-image: url('../images/icons/home.svg');
+  background-repeat: no-repeat;
+}
+
+.mini-game-sprint,
+.container__mini-game {
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: nowrap;
+  margin-left: 20%;
+  align-items: stretch;
+}
+
+.sprint__field {
+  padding: 20px;
+  background-color: #2e9e8a;
+  opacity: 0.8;
+  border-radius: 10px;
+  width: 63vw;
+  height: 60vh;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.sprint-title {
+  color: white;
+  font-size: 48px;
+  text-shadow: 0 3px 3px black;
+}
+
+.sprint-description-game {
+  font-size: 30px;
+  color: white;
+  font-weight: bold;
+  text-shadow: 0 3px 3px black;
+}
+
+.button-level {
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+  border: 2px solid black;
+  color: white;
+}
+
+.level-one {
+  background-color: #539081;
+}
+.level-two {
+  background-color: #688179;
+}
+.level-three {
+  background-color: #767170;
+}
+.level-four {
+  background-color: #826168;
+}
+.level-five {
+  background-color: #8a5060;
+}
+.level-six {
+  background-color: #913b58;
+}
+
+.sprint-conten {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 100%;
+  margin: 40px;
+}
+
+.sprint-conten__header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.sprint-content__field {
+  display: flex;
+  flex-direction: column;
+}
+
+.sprint-content__clock,
+.sprint-content__counter {
+  width: 70px;
+  height: 70px;
+  border: 2px solid black;
+  border-radius: 50%;
+  background-color: #204d44;
+  color: white;
+  font-size: 45px;
+  text-align: center;
+  line-height: 150%;
+}
+
+.sprint-content__counter {
+  font-size: 30px !important;
+  line-height: 210% !important;
+}
+
+.sprint-content__field__word {
+  font-size: 40px;
+  font-weight: bold;
+  color: white;
+  margin: 20px;
+}
+
+.sprint-content__field__translate {
+  font-size: 40px;
+  font-weight: bold;
+  color: wheat;
+  font-style: italic;
+  margin: 20px;
+}
+
+.sprint-content__field__btn {
+  width: 100px;
+  height: 40px;
+  border-radius: 5px;
+  border: 2px solid black;
+  color: white;
+  margin: 20px;
+  font-size: 18px;
+}
+
+.field__btn__false {
+  background-color: #913b58;
+  margin: 20px;
+}
+
+.field__btn__true {
+  background-color: #20b2aa;
+  margin: 20px;
+}
+
+.sprint__result-page {
+  max-height: 65vh;
+  min-height: 400px;
+  overflow-y: scroll;
+}
+
+.sprint__result-page::-webkit-scrollbar {
+  width: 10px;
+  background-color: #f9f9fd;
+}
+
+.sprint__result-page::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #204d44;
+}
+
+.sprint__result-page::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  background-color: #f9f9fd;
+}
+
+.icon-audio {
+  border: none;
+  background: none;
+  width: 40px;
+  background-repeat: no-repeat;
+  background-image: url('../images/icons/sound-on_121151.svg');
+}
+
+.icon-sound {
+  height: 15px;
+}
+
+.sprint__result-list__item {
+  font-size: 25px;
+  font-weight: lighter;
+  color: white;
+  margin: 20px;
+  text-shadow: 0 1px 1px black;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  align-items: center;
+}
+
+h2 {
+  color: white;
+  font-size: 35px;
+  text-shadow: 0 3px 3px black;
+}
+
+.sprint__result-title-true {
+  color: white;
+  font-size: 30px;
+  text-shadow: 0 3px 3px #204d44;
+}
+
+.sprint__result-title-false {
+  color: white;
+  font-size: 30px;
+  text-shadow: 0 3px 3px #913b58;
+}
+
+.line {
+  color: #204d44;
+}

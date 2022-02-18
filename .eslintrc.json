@@ -19,5 +19,8 @@
   "rules": {
     "@typescript-eslint/no-useless-constructor": "off"
   },
+  "rules": {
+    "no-debugger": 0
+  },
   "ignorePatterns": ["*config.js"]
 }
