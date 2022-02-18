@@ -1,5 +1,6 @@
 import { SprintView } from './sprintView';
 import { Word, SprintModel } from './sprintModel';
+import './styles/style.css';
 
 export class SprintController {
   view: SprintView;
@@ -33,13 +34,13 @@ export class SprintController {
   constructor(level = 0, page = 0) {
     this.currentLevel = level;
     this.currentPage = page;
-
     this.view = new SprintView();
     this.model = new SprintModel();
-    this.container = document.querySelector('.container__mini-game') as HTMLElement;
-    this.wrapper = this.view.createElement('div', 'sprint__field') as HTMLElement;
-    this.wrapperCard = this.view.createElement('div', '.sprint-content__field') as HTMLElement;
-    this.time = 2;
+    this.container = document.querySelector('.main') as HTMLElement;
+    this.container.innerHTML = '';
+    this.wrapper = this.view.createElement('div', 'sprint__field');
+    this.wrapperCard = this.view.createElement('div', '.sprint-content__field');
+    this.time = 60;
     this.score = 0;
     this.correctAnswers = [];
     this.incorrectAnswers = [];

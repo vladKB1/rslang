@@ -17,10 +17,8 @@
   },
   "plugins": ["@typescript-eslint", "prettier"],
   "rules": {
-    "@typescript-eslint/no-useless-constructor": "off"
-  },
-  "rules": {
-    "no-debugger": 0
+    "no-debugger": 0,
+    "@typescript-eslint/no-useless-constructor": 0
   },
   "ignorePatterns": ["*config.js"]
 }

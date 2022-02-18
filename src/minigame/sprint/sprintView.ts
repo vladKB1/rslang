@@ -1,7 +1,7 @@
 import { baseUrl, Word } from './sprintModel';
 
 export class SprintView {
-  createElement(tag: string, className: string) {
+  createElement(tag: string, className: string): HTMLElement {
     const element = document.createElement(tag);
     if (className) element.classList.add(className);
     return element;

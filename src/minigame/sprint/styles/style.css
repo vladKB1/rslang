@@ -2,13 +2,13 @@
   display: none !important;
 }
 
-body {
+/* body {
   background-image: url('../images/background-1.jpg');
   background-repeat: no-repeat;
   background-size: 100%;
   margin: 0;
   overflow-x: hidden;
-}
+} */
 
 .sprint__header {
   display: flex;
@@ -45,6 +45,7 @@ body {
 }
 
 .sprint__field {
+  margin: 0 auto;
   padding: 20px;
   background-color: #2e9e8a;
   opacity: 0.8;
@@ -195,6 +196,7 @@ body {
   border: none;
   background: none;
   width: 40px;
+  height: 40px;
   background-repeat: no-repeat;
   background-image: url('../images/icons/sound-on_121151.svg');
 }
