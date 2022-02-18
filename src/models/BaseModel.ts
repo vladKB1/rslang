@@ -1,5 +1,5 @@
 export class BaseModel {
-  token = '';
+  user = JSON.parse(localStorage.getItem('userData') as string) || {};
 
-  isAuthorized = false;
+  isAuthorized = Boolean(Object.keys(this.user).length);
 }
