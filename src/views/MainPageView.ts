@@ -33,7 +33,8 @@ export class MainPageView extends BaseView {
     text.append(title, description);
 
     if (!isAuthorized) {
-      const logInButton = this.createElement('button', 'button', 'log-in-button');
+      const logInButton = this.createElement('a', 'button', 'log-in-button') as HTMLAnchorElement;
+      logInButton.href = '#authorization-popup';
       logInButton.textContent = 'Войти';
       text.append(logInButton);
     }

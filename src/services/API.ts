@@ -10,6 +10,10 @@ export type User = {
   password: string;
 };
 
+export type RequestFunction = (user: User) => Promise<Response>;
+
+export type RequestData = User;
+
 export const createUser = async (user: User) => {
   const rawResponse = await fetch(`${baseUrl}${path.users}`, {
     method: 'POST',
@@ -36,4 +40,8 @@ export const signIn = async (user: User) => {
   return rawResponse;
 };
 
-//export const makeRequest = async (func: requestFunction) => {};
+export const makeRequest = async (action: RequestFunction, data: RequestData) => {
+  const rawResponse = await action(data);
+  const content = await rawResponse.json();
+  return content;
+};

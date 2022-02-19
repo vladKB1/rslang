@@ -1,5 +1,6 @@
 import rsSchoolLogo from '../assets/images/svg/rs_school_js.svg';
 import signInImg from '../assets/images/svg/sign-in-image.svg';
+import { User } from '../services/API';
 
 export type MenuItem = {
   itemName: string;
@@ -24,6 +25,10 @@ export class BaseView {
 
   authorizationForm!: HTMLElement;
 
+  signInButton!: HTMLElement;
+
+  signUpButton!: HTMLElement;
+
   constructor(isAuthorized: boolean) {
     this.body = this.getElement('body');
     this.body.innerHTML = '';
@@ -39,6 +44,8 @@ export class BaseView {
     if (!isAuthorized) {
       this.authorizationPopUp = this.getElement('.authorization-popup');
       this.authorizationForm = this.getElement('.authorization-form');
+      this.signInButton = this.getElement('.authorization-form__log-in-button');
+      this.signUpButton = this.getElement('.authorization-form__sign-up-button');
     }
   }
 
@@ -335,6 +342,17 @@ export class BaseView {
       input.addEventListener('blur', () => {
         handler(input as HTMLInputElement);
       });
+    });
+  }
+
+  bindSignInUser(handler: (user: User) => void) {
+    this.authorizationForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      if (event.submitter === this.signInButton) {
+        const formData = Object.fromEntries(new FormData(event.target as HTMLFormElement).entries());
+        handler(formData as User);
+      }
     });
   }
 }

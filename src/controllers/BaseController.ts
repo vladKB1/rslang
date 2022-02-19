@@ -1,5 +1,6 @@
 import { BaseModel } from '../models/BaseModel';
 import { BaseView } from '../views/BaseView';
+import { User } from '../services/API';
 
 export class BaseController {
   model: BaseModel;
@@ -13,6 +14,7 @@ export class BaseController {
     if (!model.isAuthorized) {
       this.view.bindChangeAuthorizationForm(this.handleChangeAuthorizationForm);
       this.view.bindBlurInputAction(this.handleBlurInputAction);
+      this.view.bindSignInUser(this.handleSignInUser);
     }
   }
 
@@ -22,5 +24,9 @@ export class BaseController {
 
   handleBlurInputAction = (input: HTMLInputElement) => {
     this.view.blurInputAction(input);
+  };
+
+  handleSignInUser = (user: User) => {
+    this.model.SignInUser(user);
   };
 }
