@@ -9,5 +9,18 @@ export class BaseController {
   constructor(model: BaseModel, view: BaseView) {
     this.model = model;
     this.view = view;
+
+    if (!model.isAuthorized) {
+      this.view.bindChangeAuthorizationForm(this.handleChangeAuthorizationForm);
+      this.view.bindBlurInputAction(this.handleBlurInputAction);
+    }
   }
+
+  handleChangeAuthorizationForm = (target: HTMLElement) => {
+    this.view.changeAuthorizationForm(target);
+  };
+
+  handleBlurInputAction = (input: HTMLInputElement) => {
+    this.view.blurInputAction(input);
+  };
 }

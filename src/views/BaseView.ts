@@ -20,6 +20,10 @@ export class BaseView {
 
   footer: HTMLElement;
 
+  authorizationPopUp!: HTMLElement;
+
+  authorizationForm!: HTMLElement;
+
   constructor(isAuthorized: boolean) {
     this.body = this.getElement('body');
     this.body.innerHTML = '';
@@ -31,6 +35,11 @@ export class BaseView {
     this.mainMenu = this.getElement('main-menu');
     this.main = this.getElement('main');
     this.footer = this.getElement('footer');
+
+    if (!isAuthorized) {
+      this.authorizationPopUp = this.getElement('.authorization-popup');
+      this.authorizationForm = this.getElement('.authorization-form');
+    }
   }
 
   createElement(tag: string, ...classNames: string[]): HTMLElement {
@@ -80,7 +89,7 @@ export class BaseView {
 
       if (item.nestedMenu) {
         const nestedMenu = this.createMenu(`${item.id}-menu`, item.nestedMenu);
-        nestedMenu.classList.add('sub-nav', 'hidden');
+        nestedMenu.classList.add('sub-nav');
         boarder.append(nestedMenu);
       }
 
@@ -215,6 +224,19 @@ export class BaseView {
     return popUp;
   }
 
+  createChangeFormContainer(question: string, buttonText: string): HTMLElement {
+    const container = this.createElement('div', 'change-form-container');
+
+    const description = this.createElement('span', 'description');
+    description.textContent = question;
+
+    const button = this.createElement('a', 'change-form-container__button');
+    button.textContent = buttonText;
+
+    container.append(description, button);
+    return container;
+  }
+
   createAuthorizationForm(): HTMLElement {
     const authorizationForm = this.createElement('form', 'authorization-form');
 
@@ -243,15 +265,17 @@ export class BaseView {
 
     const logInButton = this.createElement('button', 'button', 'authorization-form__log-in-button');
     logInButton.textContent = 'Войти';
+    const singUpContainer = this.createChangeFormContainer('Нет аккаунта? ', 'Регистрация');
+    singUpContainer.classList.add('sign-up-container');
 
-    const singUpContainer = this.createElement('div', 'sing-up-container');
-    const description = this.createElement('span', 'description');
-    description.textContent = 'Нет аккаунта? ';
-    const singUpButton = this.createElement('a', 'sing-up-container__button');
-    singUpButton.textContent = 'Регистрация';
-    singUpContainer.append(description, singUpButton);
+    const SignUpButton = this.createElement('button', 'button', 'authorization-form__sign-up-button', 'hidden');
+    SignUpButton.textContent = 'Зарегистрироваться';
+    const logInContainer = this.createChangeFormContainer('Уже есть аккаунт? ', 'Войти');
+    logInContainer.classList.add('log-in-container', 'hidden');
 
-    authorizationForm.append(title, email, password, logInButton, singUpContainer);
+    authorizationForm.append(title, email, password);
+    authorizationForm.append(logInButton, singUpContainer);
+    authorizationForm.append(SignUpButton, logInContainer);
     return authorizationForm;
   }
 
@@ -264,5 +288,53 @@ export class BaseView {
 
     content.append(image, AuthorizationForm);
     return popUp;
+  }
+
+  changeAuthorizationForm(target: HTMLElement) {
+    const logInButton = this.authorizationForm?.querySelector('.authorization-form__log-in-button');
+    const signUpContainer = this.authorizationForm?.querySelector('.sign-up-container');
+    const signUpButton = this.authorizationForm?.querySelector('.authorization-form__sign-up-button');
+    const logInContainer = this.authorizationForm?.querySelector('.log-in-container');
+
+    if (target.closest('.sign-up-container')) {
+      logInButton?.classList.add('hidden');
+      signUpContainer?.classList.add('hidden');
+
+      signUpButton?.classList.remove('hidden');
+      logInContainer?.classList.remove('hidden');
+    } else if (target.closest('.log-in-container')) {
+      signUpButton?.classList.add('hidden');
+      logInContainer?.classList.add('hidden');
+
+      logInButton?.classList.remove('hidden');
+      signUpContainer?.classList.remove('hidden');
+    }
+  }
+
+  bindChangeAuthorizationForm(handler: (container: HTMLElement) => void) {
+    this.authorizationForm?.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      if (target.classList.contains('change-form-container__button')) {
+        handler(target);
+      }
+    });
+  }
+
+  blurInputAction(input: HTMLInputElement) {
+    if ((input as HTMLInputElement).value) {
+      input.classList.add('has-value');
+    } else {
+      input.classList.remove('has-value');
+    }
+  }
+
+  bindBlurInputAction(handler: (target: HTMLInputElement) => void) {
+    const inputs = this.authorizationForm.querySelectorAll('.authorization-form__input');
+
+    inputs.forEach((input) => {
+      input.addEventListener('blur', () => {
+        handler(input as HTMLInputElement);
+      });
+    });
   }
 }

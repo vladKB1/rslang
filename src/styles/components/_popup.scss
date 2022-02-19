@@ -13,6 +13,7 @@
   backdrop-filter: blur(5px); 
   opacity: 0;
   visibility: hidden;
+  transition: all 0.5s;
 
   
   &:target {
@@ -91,15 +92,23 @@
 
         border: none;
         font-size: $input-form-font-size;
-        color: $text-color;    
+        color: black;    
         
-        &:focus + .focus-place-holder::after {
+        &:focus + .focus-place-holder::after {        
           top: -15px;
         }
 
         &:focus + .focus-place-holder::before {
           width: 100%;
         }
+      }
+
+      .has-value.authorization-form__input + .focus-place-holder::after {        
+        top: -15px;
+      }
+
+      .has-value.authorization-form__input + .focus-place-holder::before {
+        width: 100%;
       }
 
       .focus-place-holder {
@@ -139,17 +148,18 @@
       }
     }        
 
-    .authorization-form__log-in-button {
+    .authorization-form__log-in-button,
+    .authorization-form__sign-up-button {
       width: 100%;
       margin-top: 20px;
       font-size: $authorization-button-font-size;
     }
   }
 
-  .sing-up-container {
+  .change-form-container {
     margin-top: 100px;
 
-    .sing-up-container__button {
+    .change-form-container__button {
       color: $not-active-button;
       cursor: pointer;
 
