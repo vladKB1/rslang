@@ -355,4 +355,15 @@ export class BaseView {
       }
     });
   }
+
+  bindSignUpUser(handler: (user: User) => void) {
+    this.authorizationForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      if (event.submitter === this.signUpButton) {
+        const formData = Object.fromEntries(new FormData(event.target as HTMLFormElement).entries());
+        handler(formData as User);
+      }
+    });
+  }
 }

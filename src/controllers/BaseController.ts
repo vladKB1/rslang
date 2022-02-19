@@ -15,6 +15,7 @@ export class BaseController {
       this.view.bindChangeAuthorizationForm(this.handleChangeAuthorizationForm);
       this.view.bindBlurInputAction(this.handleBlurInputAction);
       this.view.bindSignInUser(this.handleSignInUser);
+      this.view.bindSignUpUser(this.handleSignUpUser);
     }
   }
 
@@ -26,7 +27,12 @@ export class BaseController {
     this.view.blurInputAction(input);
   };
 
-  handleSignInUser = (user: User) => {
-    this.model.SignInUser(user);
+  handleSignInUser = async (user: User) => {
+    await this.model.SignInUser(user);
+  };
+
+  handleSignUpUser = async (user: User) => {
+    await this.model.SignUpUser(user);
+    setTimeout(() => this.model.SignInUser(user), 1000);
   };
 }

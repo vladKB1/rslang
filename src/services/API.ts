@@ -41,6 +41,7 @@ export const signIn = async (user: User) => {
 };
 
 export const makeRequest = async (action: RequestFunction, data: RequestData) => {
+  console.log(action.name);
   const rawResponse = await action(data);
   const content = await rawResponse.json();
   return content;

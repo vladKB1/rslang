@@ -1,4 +1,4 @@
-import { User, signIn, makeRequest } from '../services/API';
+import { User, signIn, makeRequest, createUser } from '../services/API';
 
 export class BaseModel {
   user = JSON.parse(localStorage.getItem('userData') as string) || {};
@@ -7,6 +7,11 @@ export class BaseModel {
 
   SignInUser(user: User) {
     const content = makeRequest(signIn, user);
+    console.log(content);
+  }
+
+  SignUpUser(user: User) {
+    const content = makeRequest(createUser, user);
     console.log(content);
   }
 }
