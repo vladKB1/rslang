@@ -153,7 +153,7 @@ export class MainPageView extends BaseView {
     return container;
   }
 
-  renderMainPage(isAuthorized: boolean): void {
+  renderMainPage(isAuthorized: boolean) {
     const sectionRsLang = this.createElement('section', 'rslang-description');
     const backgroundImage = this.createImage(backgroundImageSource, '', 'description-background-img');
 
@@ -173,5 +173,10 @@ export class MainPageView extends BaseView {
     sectionAboutUs.id = 'aboutUs';
     sectionAboutUs.append(this.createSectionAboutUs());
     this.main.append(sectionAboutUs);
+  }
+
+  reRenderMainPage(isAuthorized: boolean) {
+    this.reRenderBasePage(isAuthorized);
+    this.renderMainPage(isAuthorized);
   }
 }

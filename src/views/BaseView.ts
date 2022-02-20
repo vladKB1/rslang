@@ -9,17 +9,17 @@ export type MenuItem = {
 };
 
 export class BaseView {
-  body: HTMLElement;
+  body!: HTMLElement;
 
-  app: HTMLElement;
+  app!: HTMLElement;
 
-  header: HTMLElement;
+  header!: HTMLElement;
 
-  mainMenu: HTMLElement;
+  mainMenu!: HTMLElement;
 
-  main: HTMLElement;
+  main!: HTMLElement;
 
-  footer: HTMLElement;
+  footer!: HTMLElement;
 
   authorizationPopUp!: HTMLElement;
 
@@ -32,24 +32,7 @@ export class BaseView {
   signUpButton!: HTMLElement;
 
   constructor(isAuthorized: boolean) {
-    this.body = this.getElement('body');
-    this.body.innerHTML = '';
-    this.body.append(this.renderBasePage(isAuthorized));
-    if (!isAuthorized) this.body.append(this.renderAuthorizationPopUp());
-
-    this.app = this.getElement('#root');
-    this.header = this.getElement('header');
-    this.mainMenu = this.getElement('main-menu');
-    this.main = this.getElement('main');
-    this.footer = this.getElement('footer');
-
-    if (!isAuthorized) {
-      this.authorizationPopUp = this.getElement('.authorization-popup');
-      this.authorizationForm = this.getElement('.authorization-form');
-      this.authorizationErrorText = this.getElement('.authorization-form__error-text');
-      this.signInButton = this.getElement('.authorization-form__log-in-button');
-      this.signUpButton = this.getElement('.authorization-form__sign-up-button');
-    }
+    this.reRenderBasePage(isAuthorized);
   }
 
   createElement(tag: string, ...classNames: string[]): HTMLElement {
@@ -68,6 +51,27 @@ export class BaseView {
   getElement(selector: string): HTMLElement {
     const element = document.querySelector(selector);
     return element as HTMLElement;
+  }
+
+  reRenderBasePage(isAuthorized: boolean) {
+    this.body = this.getElement('body');
+    this.body.innerHTML = '';
+    this.body.append(this.renderBasePage(isAuthorized));
+    if (!isAuthorized) this.body.append(this.renderAuthorizationPopUp());
+
+    this.app = this.getElement('#root');
+    this.header = this.getElement('header');
+    this.mainMenu = this.getElement('main-menu');
+    this.main = this.getElement('main');
+    this.footer = this.getElement('footer');
+
+    if (!isAuthorized) {
+      this.authorizationPopUp = this.getElement('.authorization-popup');
+      this.authorizationForm = this.getElement('.authorization-form');
+      this.authorizationErrorText = this.getElement('.authorization-form__error-text');
+      this.signInButton = this.getElement('.authorization-form__log-in-button');
+      this.signUpButton = this.getElement('.authorization-form__sign-up-button');
+    }
   }
 
   createLogo(className: string, href: string, title?: string): HTMLElement {
@@ -165,6 +169,8 @@ export class BaseView {
       logInButton.textContent = 'Войти';
       container.append(logInButton);
     }
+
+    //TODO: menu of athorized user
 
     header.append(container);
 
