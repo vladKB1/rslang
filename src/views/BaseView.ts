@@ -5,7 +5,7 @@ import { User } from '../services/API';
 
 export type MenuItem = {
   itemName: string;
-  id: string;
+  itemClass: string;
   nestedMenu: MenuItem[] | null;
 };
 
@@ -78,7 +78,7 @@ export class BaseView {
       this.signUpButton = this.getElement('.authorization-form__sign-up-button');
     } else {
       this.user = this.getElement('.user');
-      this.logOutButton = this.getElement('#logout');
+      this.logOutButton = this.getElement('.logout');
     }
   }
 
@@ -102,15 +102,13 @@ export class BaseView {
       const li = this.createElement('li');
       const boarder = this.createElement('div', 'nav-item');
 
-      const a = this.createElement('a') as HTMLAnchorElement;
-      a.id = item.id;
-      a.href = `#${item.id}`;
+      const a = this.createElement('a', item.itemClass) as HTMLAnchorElement;
       a.textContent = item.itemName;
 
       boarder.append(a);
 
       if (item.nestedMenu) {
-        const nestedMenu = this.createMenu(`${item.id}-menu`, item.nestedMenu);
+        const nestedMenu = this.createMenu(`${item.itemClass}-menu`, item.nestedMenu);
         nestedMenu.classList.remove('navigation');
         nestedMenu.classList.add('sub-nav', 'un-shown');
         boarder.append(nestedMenu);
@@ -128,19 +126,19 @@ export class BaseView {
     header.id = 'header';
     const container = this.createElement('div', 'container', 'header-container');
 
-    const logo = this.createLogo('main-logo', '#header', 'RS Lang');
+    const logo = this.createLogo('main-logo', '#main', 'RS Lang');
 
     const menu = this.createElement('nav', 'header-nav-container');
     menu.append(
       this.createMenu('main-menu', [
         {
           itemName: 'Учебник',
-          id: 'textbook',
+          itemClass: 'textbook',
           nestedMenu: isAuthorized
             ? [
                 {
                   itemName: 'Сложные слова',
-                  id: 'text-book-difficult-words',
+                  itemClass: 'text-book-difficult-words',
                   nestedMenu: null,
                 },
               ]
@@ -148,27 +146,32 @@ export class BaseView {
         },
         {
           itemName: 'Мини-игры',
-          id: 'mini-games',
+          itemClass: 'mini-games',
           nestedMenu: [
             {
               itemName: 'Аудиовызов',
-              id: 'game-audio',
+              itemClass: 'game-audio',
               nestedMenu: null,
             },
             {
               itemName: 'Спринт',
-              id: 'game-sprint',
+              itemClass: 'game-sprint',
               nestedMenu: null,
             },
           ],
         },
         {
           itemName: 'О команде',
-          id: 'aboutUs',
+          itemClass: 'about',
           nestedMenu: null,
         },
       ]),
     );
+
+    const miniGames = menu.querySelector('.mini-games') as HTMLAnchorElement;
+    miniGames.href = '#mini-games';
+    const aboutUs = menu.querySelector('.about') as HTMLAnchorElement;
+    aboutUs.href = '#aboutUs';
 
     container.append(logo, menu);
 
@@ -191,12 +194,12 @@ export class BaseView {
       const subNav = this.createMenu('user-menu', [
         {
           itemName: 'Статистика',
-          id: 'statistics',
+          itemClass: 'statistics',
           nestedMenu: null,
         },
         {
           itemName: 'Выход',
-          id: 'logout',
+          itemClass: 'logout',
           nestedMenu: null,
         },
       ]);
@@ -370,6 +373,33 @@ export class BaseView {
     }
   }
 
+  bindChangeAuthorizationForm(handler: (container: HTMLElement) => void) {
+    this.authorizationForm?.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      if (target.classList.contains('change-form-container__button')) {
+        handler(target);
+      }
+    });
+  }
+
+  blurInputAction(input: HTMLInputElement) {
+    if ((input as HTMLInputElement).value) {
+      input.classList.add('has-value');
+    } else {
+      input.classList.remove('has-value');
+    }
+  }
+
+  bindBlurInputAction(handler: (target: HTMLInputElement) => void) {
+    const inputs = this.authorizationForm.querySelectorAll('.authorization-form__input');
+
+    inputs.forEach((input) => {
+      input.addEventListener('blur', () => {
+        handler(input as HTMLInputElement);
+      });
+    });
+  }
+
   bindMouseEventToNavItem(isAuthorized: boolean) {
     const targets = [...this.header.querySelectorAll('.navigation .nav-item')];
     if (isAuthorized) targets.push(this.header.querySelector('.user') as Element);
@@ -399,33 +429,6 @@ export class BaseView {
     });
   }
 
-  bindChangeAuthorizationForm(handler: (container: HTMLElement) => void) {
-    this.authorizationForm?.addEventListener('click', (event) => {
-      const target = event.target as HTMLElement;
-      if (target.classList.contains('change-form-container__button')) {
-        handler(target);
-      }
-    });
-  }
-
-  blurInputAction(input: HTMLInputElement) {
-    if ((input as HTMLInputElement).value) {
-      input.classList.add('has-value');
-    } else {
-      input.classList.remove('has-value');
-    }
-  }
-
-  bindBlurInputAction(handler: (target: HTMLInputElement) => void) {
-    const inputs = this.authorizationForm.querySelectorAll('.authorization-form__input');
-
-    inputs.forEach((input) => {
-      input.addEventListener('blur', () => {
-        handler(input as HTMLInputElement);
-      });
-    });
-  }
-
   bindSignInUser(handler: (user: User) => void) {
     this.authorizationForm?.addEventListener('submit', (event) => {
       event.preventDefault();
@@ -450,8 +453,6 @@ export class BaseView {
 
   bindLogOutUser(handler: () => void) {
     this.header?.addEventListener('click', (event) => {
-      event.preventDefault();
-
       const target = event.target as HTMLElement;
       if (target === this.logOutButton) {
         handler();

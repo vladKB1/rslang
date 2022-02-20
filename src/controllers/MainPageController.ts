@@ -15,5 +15,18 @@ export class MainPageController extends BaseController {
 
   onReRenderMainPage = async (isAuthorized: boolean) => {
     await this.view.reRenderMainPage(isAuthorized);
+
+    if (!this.model.isAuthorized) {
+      this.model.bindAuthorizationErrorTextChanged(this.onAuthorizationErrorTextChanged);
+
+      this.view.bindChangeAuthorizationForm(this.handleChangeAuthorizationForm);
+      this.view.bindBlurInputAction(this.handleBlurInputAction);
+      this.view.bindSignInUser(this.handleSignInUser);
+      this.view.bindSignUpUser(this.handleSignUpUser);
+    } else {
+      this.view.bindLogOutUser(this.handleLogOutUser);
+    }
+
+    this.view.bindMouseEventToNavItem(this.model.isAuthorized);
   };
 }

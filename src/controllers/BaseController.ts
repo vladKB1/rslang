@@ -11,7 +11,7 @@ export class BaseController {
     this.model = model;
     this.view = view;
 
-    if (!model.isAuthorized) {
+    if (!this.model.isAuthorized) {
       this.model.bindAuthorizationErrorTextChanged(this.onAuthorizationErrorTextChanged);
 
       this.view.bindChangeAuthorizationForm(this.handleChangeAuthorizationForm);

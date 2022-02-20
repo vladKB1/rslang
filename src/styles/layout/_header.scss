@@ -6,7 +6,7 @@
   z-index: 10;
 
   background-color: white;
-  box-shadow: 0 0 10px 0 rgba(0,0,0,0.75);
+  box-shadow: 0 0 10px 0 rgba(0,0,0,0.75); 
 }
 
 .header-container {
@@ -19,6 +19,10 @@
     flex-shrink: 1;
     font-weight: 700;
     color: black;
+
+    &:hover {
+      color: $active-nav;
+    }
   }
 
   .header-nav-container {
@@ -39,8 +43,24 @@
 
     .user__settings {
       @include flex(space-between);
+      margin: 5px;
       padding: 5px 15px;
-      border-bottom: $not-active-nav solid 3px;
+    
+      border-radius: 15px;    
+      cursor: pointer;
+
+      &::after {
+        position: absolute;
+        top: 2px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        border-bottom: $not-active-nav solid 3px;
+      }
+
+      &:hover {
+        background-color: #eef5fd;
+      }
 
       .user__avatar {
         max-width: 35%;

@@ -153,8 +153,9 @@ export class MainPageView extends BaseView {
     return container;
   }
 
-  renderMainPage(isAuthorized: boolean) {
+  async renderMainPage(isAuthorized: boolean) {
     const sectionRsLang = this.createElement('section', 'rslang-description');
+    sectionRsLang.id = 'main';
     const backgroundImage = this.createImage(backgroundImageSource, '', 'description-background-img');
 
     sectionRsLang.append(backgroundImage, this.createSectionRsLang(isAuthorized));

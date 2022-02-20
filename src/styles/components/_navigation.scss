@@ -4,14 +4,14 @@
   font-weight: 600;
   color: black;
 
-  li {
+  li {   
     margin-right: 20px;
   }
 
-  .nav-item {    
-    position: relative;
-    padding: 5px 15px;    
-    cursor: pointer;
+  .nav-item {        
+    position: relative;   
+    padding: 5px 15px;
+    cursor: pointer;    
 
     &:hover {
       background-color: $not-active-nav;
@@ -32,35 +32,39 @@
     @include flex($align: flex-start, $direction: column);
     position: absolute;      
     left: 0px;
-    top: 40px;
-    z-index: 3;   
+    top: 38px;
+    z-index: 3;
+    min-width: 100%;      
+    width: max-content; 
 
     background-color: white;
     box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%), 0 4px 12px 0 rgb(0 0 0 / 6%);
     border-radius: 15px;       
-  }
-
-  li {
-    margin-right: 0;     
-  }
-
-  .nav-item {
-    padding: 5px 15px; 
-    cursor: pointer;
-
-    &:hover {
-      background-color: transparent;
-      border-radius: 0;
+  
+    li {
+      width: 100%;
+      margin-right: 0;     
     }
 
-    a {
-      color: black;
+    .nav-item {
+      padding: 5px 15px; 
+      cursor: pointer;
 
-      &:hover {          
-        color: $active-nav;        
-      }        
+      &:hover {
+        background-color: transparent;
+        border-radius: 0;
+      }
+
+      a {
+        display: block;
+        color: black;
+
+        &:hover {          
+          color: $active-nav;        
+        }        
+      }
     }
-  } 
+  }
 }
 
 .user__nav-container {
@@ -68,7 +72,7 @@
   @include flex($align: flex-start, $direction: column);
   min-width: 250px;
   right: 0px;
-  top: 40px;
+  top: 38px;
   z-index: 3;   
 
   background-color: white;
@@ -77,12 +81,20 @@
 
   .user-menu {
     @include flex($align: flex-start, $direction: column);
-          
+    min-width: 100%;      
+    width: max-content; 
+    
+    li {
+      width: 100%;      
+    }
+
     .nav-item {  
-      padding: 5px 15px; 
+      width: 100%;
+      padding: 5px 15px;       
       cursor: pointer;
 
       a {
+        display: block;
         color: black;
 
         &:hover {          
