@@ -148,6 +148,11 @@
       }
     }        
 
+    .authorization-form__error-text {
+      font-size: $error-text-font-size;
+      color: $error-text-color;
+    }
+
     .authorization-form__log-in-button,
     .authorization-form__sign-up-button {
       width: 100%;

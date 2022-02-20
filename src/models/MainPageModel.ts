@@ -1,3 +1,7 @@
 import { BaseModel } from './BaseModel';
 
-export class MainPageModel extends BaseModel {}
+export class MainPageModel extends BaseModel {
+  constructor() {
+    super();
+  }
+}

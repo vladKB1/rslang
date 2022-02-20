@@ -12,12 +12,18 @@ export class BaseController {
     this.view = view;
 
     if (!model.isAuthorized) {
+      this.model.bindAuthorizationErrorTextChanged(this.onAuthorizationErrorTextChanged);
+
       this.view.bindChangeAuthorizationForm(this.handleChangeAuthorizationForm);
       this.view.bindBlurInputAction(this.handleBlurInputAction);
       this.view.bindSignInUser(this.handleSignInUser);
       this.view.bindSignUpUser(this.handleSignUpUser);
     }
   }
+
+  onAuthorizationErrorTextChanged = (newErrorText: string) => {
+    this.view.changeAuthorizationErrorText(newErrorText);
+  };
 
   handleChangeAuthorizationForm = (target: HTMLElement) => {
     this.view.changeAuthorizationForm(target);
@@ -28,11 +34,19 @@ export class BaseController {
   };
 
   handleSignInUser = async (user: User) => {
-    await this.model.SignInUser(user);
+    try {
+      await this.model.signInUser(user);
+    } catch (error) {
+      return;
+    }
   };
 
   handleSignUpUser = async (user: User) => {
-    await this.model.SignUpUser(user);
-    setTimeout(() => this.model.SignInUser(user), 1000);
+    try {
+      await this.model.signUpUser(user);
+      await setTimeout(() => this.handleSignInUser(user), 1000);
+    } catch (error) {
+      return;
+    }
   };
 }

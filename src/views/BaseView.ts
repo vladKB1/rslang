@@ -25,6 +25,8 @@ export class BaseView {
 
   authorizationForm!: HTMLElement;
 
+  authorizationErrorText!: HTMLElement;
+
   signInButton!: HTMLElement;
 
   signUpButton!: HTMLElement;
@@ -44,6 +46,7 @@ export class BaseView {
     if (!isAuthorized) {
       this.authorizationPopUp = this.getElement('.authorization-popup');
       this.authorizationForm = this.getElement('.authorization-form');
+      this.authorizationErrorText = this.getElement('.authorization-form__error-text');
       this.signInButton = this.getElement('.authorization-form__log-in-button');
       this.signUpButton = this.getElement('.authorization-form__sign-up-button');
     }
@@ -270,6 +273,8 @@ export class BaseView {
     passwordPlaceHolder.setAttribute('data-placeholder', 'Пароль');
     password.append(passwordInput, passwordPlaceHolder);
 
+    const errorText = this.createElement('div', 'authorization-form__error-text');
+
     const logInButton = this.createElement('button', 'button', 'authorization-form__log-in-button');
     logInButton.textContent = 'Войти';
     const singUpContainer = this.createChangeFormContainer('Нет аккаунта? ', 'Регистрация');
@@ -280,7 +285,7 @@ export class BaseView {
     const logInContainer = this.createChangeFormContainer('Уже есть аккаунт? ', 'Войти');
     logInContainer.classList.add('log-in-container', 'hidden');
 
-    authorizationForm.append(title, email, password);
+    authorizationForm.append(title, email, password, errorText);
     authorizationForm.append(logInButton, singUpContainer);
     authorizationForm.append(SignUpButton, logInContainer);
     return authorizationForm;
@@ -295,6 +300,10 @@ export class BaseView {
 
     content.append(image, AuthorizationForm);
     return popUp;
+  }
+
+  changeAuthorizationErrorText(newErrorText: string) {
+    this.authorizationErrorText.textContent = newErrorText;
   }
 
   changeAuthorizationForm(target: HTMLElement) {

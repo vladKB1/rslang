@@ -41,8 +41,29 @@ export const signIn = async (user: User) => {
 };
 
 export const makeRequest = async (action: RequestFunction, data: RequestData) => {
-  console.log(action.name);
   const rawResponse = await action(data);
-  const content = await rawResponse.json();
-  return content;
+  const content = rawResponse.ok ? await rawResponse.json() : null;
+  const status = rawResponse.status;
+
+  switch (action.name) {
+    case 'createUser': {
+      switch (status) {
+        case 200:
+          return content;
+        case 417:
+          throw new Error('Пользователь уже существует.');
+        case 422:
+          throw new Error('Некорректная почта или пароль.');
+        default:
+          throw new Error('Произошла непредвиденная ошибка!');
+      }
+    }
+    case 'signIn': {
+      if (status === 200) {
+        return content;
+      } else {
+        throw new Error('Неверная почта или пароль.');
+      }
+    }
+  }
 };
