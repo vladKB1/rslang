@@ -25,7 +25,7 @@
       &:hover {          
         color: $active-nav;        
       }        
-    }
+    }  
   }
 
   .sub-nav {
@@ -37,35 +37,30 @@
 
     background-color: white;
     box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%), 0 4px 12px 0 rgb(0 0 0 / 6%);
-    border-radius: 15px; 
-    
-    // opacity: 0;
-    // visibility: hidden;
-    // width: 0;
-    // height: 0;
-
-    li {
-      margin-right: 0;     
-    }
-
-    .nav-item {
-      padding: 5px 15px; 
-      cursor: pointer;
-
-      &:hover {
-        background-color: transparent;
-        border-radius: 0;
-      }
-
-      a {
-        color: black;
-
-        &:hover {          
-          color: $active-nav;        
-        }        
-      }
-    }
+    border-radius: 15px;       
   }
+
+  li {
+    margin-right: 0;     
+  }
+
+  .nav-item {
+    padding: 5px 15px; 
+    cursor: pointer;
+
+    &:hover {
+      background-color: transparent;
+      border-radius: 0;
+    }
+
+    a {
+      color: black;
+
+      &:hover {          
+        color: $active-nav;        
+      }        
+    }
+  } 
 }
 
 .user__nav-container {
@@ -78,12 +73,7 @@
 
   background-color: white;
   box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%), 0 4px 12px 0 rgb(0 0 0 / 6%);
-  border-radius: 15px; 
-
-  // opacity: 0;
-  // visibility: hidden;
-  // width: 0;
-  // height: 0;   
+  border-radius: 15px;  
 
   .user-menu {
     @include flex($align: flex-start, $direction: column);
@@ -100,5 +90,5 @@
         }        
       }
     }
-  }
+  }  
 }

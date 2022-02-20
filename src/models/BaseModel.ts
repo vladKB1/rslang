@@ -46,6 +46,14 @@ export class BaseModel {
     }
   }
 
+  logOutUser() {
+    localStorage.removeItem('userData');
+    this.user = {};
+    this.isAuthorized = false;
+
+    this.onReRenderPage(this.isAuthorized);
+  }
+
   bindAuthorizationErrorTextChanged(callback: (newErrorText: string) => void) {
     this.onAuthorizationErrorTextChanged = callback;
   }

@@ -175,8 +175,8 @@ export class MainPageView extends BaseView {
     this.main.append(sectionAboutUs);
   }
 
-  reRenderMainPage(isAuthorized: boolean) {
-    this.reRenderBasePage(isAuthorized);
-    this.renderMainPage(isAuthorized);
+  async reRenderMainPage(isAuthorized: boolean) {
+    await this.reRenderBasePage(isAuthorized);
+    await this.renderMainPage(isAuthorized);
   }
 }

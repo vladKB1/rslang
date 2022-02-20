@@ -13,7 +13,7 @@ export class MainPageController extends BaseController {
     this.model.bindReRenderPage(this.onReRenderMainPage);
   }
 
-  onReRenderMainPage = (isAuthorized: boolean) => {
-    this.view.reRenderMainPage(isAuthorized);
+  onReRenderMainPage = async (isAuthorized: boolean) => {
+    await this.view.reRenderMainPage(isAuthorized);
   };
 }

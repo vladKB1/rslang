@@ -32,6 +32,10 @@ export class BaseView {
 
   signUpButton!: HTMLElement;
 
+  logOutButton!: HTMLElement;
+
+  user!: HTMLElement;
+
   constructor(isAuthorized: boolean) {
     this.reRenderBasePage(isAuthorized);
   }
@@ -72,6 +76,9 @@ export class BaseView {
       this.authorizationErrorText = this.getElement('.authorization-form__error-text');
       this.signInButton = this.getElement('.authorization-form__log-in-button');
       this.signUpButton = this.getElement('.authorization-form__sign-up-button');
+    } else {
+      this.user = this.getElement('.user');
+      this.logOutButton = this.getElement('#logout');
     }
   }
 
@@ -105,7 +112,7 @@ export class BaseView {
       if (item.nestedMenu) {
         const nestedMenu = this.createMenu(`${item.id}-menu`, item.nestedMenu);
         nestedMenu.classList.remove('navigation');
-        nestedMenu.classList.add('sub-nav');
+        nestedMenu.classList.add('sub-nav', 'un-shown');
         boarder.append(nestedMenu);
       }
 
@@ -173,7 +180,7 @@ export class BaseView {
     } else {
       const user = this.createElement('a', 'user');
       const userImage = this.createImage(userAvatar, 'user-avatar', 'user__avatar');
-      const userMenu = this.createElement('nav', 'user__nav-container');
+      const userMenu = this.createElement('nav', 'user__nav-container', 'un-shown');
 
       const userSettings = this.createElement('div', 'user__settings');
       const bigUserImage = this.createImage(userAvatar, 'user-avatar', 'user__avatar');
@@ -283,7 +290,8 @@ export class BaseView {
   }
 
   createAuthorizationForm(): HTMLElement {
-    const authorizationForm = this.createElement('form', 'authorization-form');
+    const authorizationForm = this.createElement('form', 'authorization-form') as HTMLFormElement;
+    authorizationForm.method = 'POST';
 
     const title = this.createElement('h1', 'title', 'authorization-form__title');
     title.textContent = 'Добро пожаловать!';
@@ -315,10 +323,10 @@ export class BaseView {
     const singUpContainer = this.createChangeFormContainer('Нет аккаунта? ', 'Регистрация');
     singUpContainer.classList.add('sign-up-container');
 
-    const SignUpButton = this.createElement('button', 'button', 'authorization-form__sign-up-button', 'hidden');
+    const SignUpButton = this.createElement('button', 'button', 'authorization-form__sign-up-button', 'un-shown');
     SignUpButton.textContent = 'Зарегистрироваться';
     const logInContainer = this.createChangeFormContainer('Уже есть аккаунт? ', 'Войти');
-    logInContainer.classList.add('log-in-container', 'hidden');
+    logInContainer.classList.add('log-in-container', 'un-shown');
 
     authorizationForm.append(title, email, password, errorText);
     authorizationForm.append(logInButton, singUpContainer);
@@ -348,18 +356,47 @@ export class BaseView {
     const logInContainer = this.authorizationForm?.querySelector('.log-in-container');
 
     if (target.closest('.sign-up-container')) {
-      logInButton?.classList.add('hidden');
-      signUpContainer?.classList.add('hidden');
+      logInButton?.classList.add('un-shown');
+      signUpContainer?.classList.add('un-shown');
 
-      signUpButton?.classList.remove('hidden');
-      logInContainer?.classList.remove('hidden');
+      signUpButton?.classList.remove('un-shown');
+      logInContainer?.classList.remove('un-shown');
     } else if (target.closest('.log-in-container')) {
-      signUpButton?.classList.add('hidden');
-      logInContainer?.classList.add('hidden');
+      signUpButton?.classList.add('un-shown');
+      logInContainer?.classList.add('un-shown');
 
-      logInButton?.classList.remove('hidden');
-      signUpContainer?.classList.remove('hidden');
+      logInButton?.classList.remove('un-shown');
+      signUpContainer?.classList.remove('un-shown');
     }
+  }
+
+  bindMouseEventToNavItem(isAuthorized: boolean) {
+    const targets = [...this.header.querySelectorAll('.navigation .nav-item')];
+    if (isAuthorized) targets.push(this.header.querySelector('.user') as Element);
+
+    targets.forEach((target) => {
+      target.addEventListener('mouseover', () => {
+        if (target.classList.contains('nav-item')) {
+          const ul = target.querySelector('ul');
+          ul?.classList.remove('un-shown');
+        } else if (target.classList.contains('user')) {
+          const nav = target.querySelector('nav');
+          nav?.classList.remove('un-shown');
+        }
+      });
+    });
+
+    targets.forEach((target) => {
+      target.addEventListener('mouseout', () => {
+        if (target.classList.contains('nav-item')) {
+          const ul = target.querySelector('ul');
+          ul?.classList.add('un-shown');
+        } else if (target.classList.contains('user')) {
+          const nav = target.querySelector('nav');
+          nav?.classList.add('un-shown');
+        }
+      });
+    });
   }
 
   bindChangeAuthorizationForm(handler: (container: HTMLElement) => void) {
@@ -407,6 +444,17 @@ export class BaseView {
       if (event.submitter === this.signUpButton) {
         const formData = Object.fromEntries(new FormData(event.target as HTMLFormElement).entries());
         handler(formData as User);
+      }
+    });
+  }
+
+  bindLogOutUser(handler: () => void) {
+    this.header?.addEventListener('click', (event) => {
+      event.preventDefault();
+
+      const target = event.target as HTMLElement;
+      if (target === this.logOutButton) {
+        handler();
       }
     });
   }

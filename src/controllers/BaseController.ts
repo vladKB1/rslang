@@ -18,7 +18,11 @@ export class BaseController {
       this.view.bindBlurInputAction(this.handleBlurInputAction);
       this.view.bindSignInUser(this.handleSignInUser);
       this.view.bindSignUpUser(this.handleSignUpUser);
+    } else {
+      this.view.bindLogOutUser(this.handleLogOutUser);
     }
+
+    this.view.bindMouseEventToNavItem(this.model.isAuthorized);
   }
 
   onAuthorizationErrorTextChanged = (newErrorText: string) => {
@@ -48,5 +52,9 @@ export class BaseController {
     } catch (error) {
       return;
     }
+  };
+
+  handleLogOutUser = () => {
+    this.model.logOutUser();
   };
 }
