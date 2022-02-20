@@ -2,21 +2,30 @@
   @include flex();
 
   font-weight: 600;
+  color: black;
 
   li {
     margin-right: 20px;
   }
 
-  .nav-item {
+  .nav-item {    
     position: relative;
-    padding: 5px 15px;
+    padding: 5px 15px;    
     cursor: pointer;
 
     &:hover {
       background-color: $not-active-nav;
       border: none;
       border-radius: 15px;      
-    }  
+    } 
+    
+    a {
+      color: black;
+
+      &:hover {          
+        color: $active-nav;        
+      }        
+    }
   }
 
   .sub-nav {
@@ -28,22 +37,67 @@
 
     background-color: white;
     box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%), 0 4px 12px 0 rgb(0 0 0 / 6%);
-    border-radius: 15px;    
-
-    opacity: 0;
-    visibility: hidden;
-    width: 0;
-    height: 0;
+    border-radius: 15px; 
+    
+    // opacity: 0;
+    // visibility: hidden;
+    // width: 0;
+    // height: 0;
 
     li {
       margin-right: 0;     
     }
 
-    .nav-item {      
+    .nav-item {
+      padding: 5px 15px; 
+      cursor: pointer;
+
       &:hover {
-        color: $title-color;
         background-color: transparent;
         border-radius: 0;
+      }
+
+      a {
+        color: black;
+
+        &:hover {          
+          color: $active-nav;        
+        }        
+      }
+    }
+  }
+}
+
+.user__nav-container {
+  position: absolute;      
+  @include flex($align: flex-start, $direction: column);
+  min-width: 250px;
+  right: 0px;
+  top: 40px;
+  z-index: 3;   
+
+  background-color: white;
+  box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%), 0 4px 12px 0 rgb(0 0 0 / 6%);
+  border-radius: 15px; 
+
+  // opacity: 0;
+  // visibility: hidden;
+  // width: 0;
+  // height: 0;   
+
+  .user-menu {
+    @include flex($align: flex-start, $direction: column);
+          
+    .nav-item {  
+      padding: 5px 15px; 
+      cursor: pointer;
+
+      a {
+        color: black;
+
+        &:hover {          
+          color: $active-nav;        
+        }        
       }
     }
   }

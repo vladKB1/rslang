@@ -1,5 +1,6 @@
 import rsSchoolLogo from '../assets/images/svg/rs_school_js.svg';
 import signInImg from '../assets/images/svg/sign-in-image.svg';
+import userAvatar from '../assets/images/svg/user-avatar.svg';
 import { User } from '../services/API';
 
 export type MenuItem = {
@@ -103,6 +104,7 @@ export class BaseView {
 
       if (item.nestedMenu) {
         const nestedMenu = this.createMenu(`${item.id}-menu`, item.nestedMenu);
+        nestedMenu.classList.remove('navigation');
         nestedMenu.classList.add('sub-nav');
         boarder.append(nestedMenu);
       }
@@ -168,9 +170,36 @@ export class BaseView {
       logInButton.href = '#authorization-popup';
       logInButton.textContent = 'Войти';
       container.append(logInButton);
-    }
+    } else {
+      const user = this.createElement('a', 'user');
+      const userImage = this.createImage(userAvatar, 'user-avatar', 'user__avatar');
+      const userMenu = this.createElement('nav', 'user__nav-container');
 
-    //TODO: menu of athorized user
+      const userSettings = this.createElement('div', 'user__settings');
+      const bigUserImage = this.createImage(userAvatar, 'user-avatar', 'user__avatar');
+      const userSettingsRank = this.createElement('span', 'user__rank');
+      userSettingsRank.textContent = 'Пользователь';
+      userSettings.append(bigUserImage, userSettingsRank);
+
+      const subNav = this.createMenu('user-menu', [
+        {
+          itemName: 'Статистика',
+          id: 'statistics',
+          nestedMenu: null,
+        },
+        {
+          itemName: 'Выход',
+          id: 'logout',
+          nestedMenu: null,
+        },
+      ]);
+      subNav.classList.add('sub-nav');
+      subNav.classList.remove('navigation');
+
+      userMenu.append(userSettings, subNav);
+      user.append(userImage, userMenu);
+      container.append(user);
+    }
 
     header.append(container);
 
