@@ -1,3 +1,4 @@
+import { SprintController } from '../minigame/sprint/sprintController';
 import { MainPageModel } from '../models/MainPageModel';
 import { MainPageView } from '../views/MainPageView';
 import { BaseController } from './BaseController';

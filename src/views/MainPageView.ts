@@ -91,6 +91,7 @@ export class MainPageView extends BaseView {
     games.append(sprintGame, audioGame);
 
     div.append(MiniGamesTitle, description, games);
+
     return div;
   }
 

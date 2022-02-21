@@ -13,15 +13,14 @@
     @include flex(space-around);
     flex-wrap: wrap;
     width: 100%;
-    
-  } 
+  }
 }
 
 .game-card {
   @include flex($direction: column);
   width: 35vh;
   height: 35vh;
-  border-radius: 15px;  
+  border-radius: 15px;
 
   .game-card-title {
     color: white;
