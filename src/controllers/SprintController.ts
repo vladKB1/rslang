@@ -1,6 +1,5 @@
-import { SprintView } from './sprintView';
-import { Word, SprintModel } from './sprintModel';
-import './styles/style.css';
+import { SprintView } from '../views/SprintView';
+import { Word, SprintModel } from '../models/SprintModel';
 
 export class SprintController {
   view: SprintView;
@@ -32,10 +31,12 @@ export class SprintController {
   currentPage: number;
 
   constructor(level = 0, page = 0) {
-    this.currentLevel = level;
-    this.currentPage = page;
     this.view = new SprintView();
     this.model = new SprintModel();
+
+    this.currentLevel = level;
+    this.currentPage = page;
+
     this.container = document.querySelector('.main') as HTMLElement;
     this.container.innerHTML = '';
     this.wrapper = this.view.createElement('div', 'sprint__field');
@@ -80,14 +81,14 @@ export class SprintController {
     });
 
     document.removeEventListener('keyup', this.keyupHandler);
-    this.addPlayWordHander();
+    this.addPlayWordHandler();
   }
 
   levelSelection() {
     const btnSelection = document.querySelector('.level_button_container') as HTMLElement;
     btnSelection.addEventListener('click', (e: Event) => {
       this.currentLevel = Number((e.target as HTMLElement).innerHTML) - 1;
-      this.model.getWordsForlevel(this.currentLevel, this.currentPage).then(() => {
+      this.model.getWordsForLevel(this.currentLevel, this.currentPage).then(() => {
         this.renderBlockTimer();
         this.renderBlockCard();
         this.startTimer();
@@ -96,7 +97,7 @@ export class SprintController {
   }
 
   renderBlockTimer() {
-    this.wrapper.innerHTML = this.view.getCardTimeTemlate();
+    this.wrapper.innerHTML = this.view.getCardTimeTemplate();
     this.container.appendChild(this.wrapper);
     this.updateScore(0);
   }
@@ -111,7 +112,7 @@ export class SprintController {
   private getRandomWord(): void {
     if (this.correctAnswers.length + this.incorrectAnswers.length === this.currentPage * 20 + 20) {
       this.currentPage++;
-      this.model.getWordsForlevel(this.currentLevel, this.currentPage).then(() => {
+      this.model.getWordsForLevel(this.currentLevel, this.currentPage).then(() => {
         this.getRandomWord();
       });
       return;
@@ -120,18 +121,18 @@ export class SprintController {
     const word = this.model.words[Math.floor(Math.random() * this.model.words.length)];
     const word2 = this.model.words[Math.floor(Math.random() * this.model.words.length)];
 
-    const alreadyAnswed = this.correctAnswers.find((element: Word) => {
+    const alreadyAnswered = this.correctAnswers.find((element: Word) => {
       if (element.word === word.word) {
         return true;
       }
     });
 
-    const alreadyAnswed2 = this.incorrectAnswers.find((element: Word) => {
+    const alreadyAnswered2 = this.incorrectAnswers.find((element: Word) => {
       if (element.word === word.word) {
         return true;
       }
     });
-    if (alreadyAnswed || alreadyAnswed2) {
+    if (alreadyAnswered || alreadyAnswered2) {
       return this.getRandomWord();
     }
     this.correctTranslation = word.wordTranslate;
@@ -209,7 +210,7 @@ export class SprintController {
     }
   };
 
-  addPlayWordHander() {
+  addPlayWordHandler() {
     const resultContainer = document.querySelector('.sprint__result-page') as HTMLElement;
     resultContainer?.addEventListener('click', (e: Event) => {
       const target = e?.target as HTMLElement;

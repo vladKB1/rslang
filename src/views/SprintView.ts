@@ -1,4 +1,4 @@
-import { baseUrl, Word } from './sprintModel';
+import { baseUrl, Word } from '../models/SprintModel';
 
 export class SprintView {
   createElement(tag: string, className: string): HTMLElement {
@@ -45,10 +45,10 @@ export class SprintView {
       </div>`;
   }
 
-  getCardTimeTemlate() {
+  getCardTimeTemplate() {
     return `
-    <div class="sprint-conten">
-    <div class="sprint-conten__header">
+    <div class="sprint-content">
+    <div class="sprint-content__header">
       <div class="sprint-content__clock" id="timer"></div>
       <div class="sprint-content__counter" id="score"></div>
     </div>`;

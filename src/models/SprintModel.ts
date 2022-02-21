@@ -21,7 +21,7 @@ export interface Word {
 export class SprintModel {
   words!: Word[];
 
-  getWordsForlevel(level: number, page?: number) {
+  getWordsForLevel(level: number, page?: number) {
     return fetch(`${baseUrl}words?page=${page}&group=${level}`)
       .then((response) => {
         return response.json();

@@ -21,7 +21,7 @@
   border: none;
   background: none;
   width: 50px;
-  background-image: url('../images/icons/soundOn.svg');
+  background-image: url("../assets/images/sprint/icons/soundOn.svg");
   background-repeat: no-repeat;
 }
 
@@ -29,7 +29,7 @@
   border: none;
   background: none;
   width: 50px;
-  background-image: url('../images/icons/home.svg');
+  background-image: url("../assets/images/sprint/icons/home.svg");
   background-repeat: no-repeat;
 }
 
@@ -98,7 +98,7 @@
   background-color: #913b58;
 }
 
-.sprint-conten {
+.sprint-content {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -106,7 +106,7 @@
   margin: 40px;
 }
 
-.sprint-conten__header {
+.sprint-content__header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -198,7 +198,7 @@
   width: 40px;
   height: 40px;
   background-repeat: no-repeat;
-  background-image: url('../images/icons/sound-on_121151.svg');
+  background-image: url("../assets/images/sprint/icons/sound-on_121151.svg");
 }
 
 .icon-sound {

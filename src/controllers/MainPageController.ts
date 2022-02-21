@@ -1,8 +1,8 @@
-import { SprintController } from '../minigame/sprint/sprintController';
 import { MainPageModel } from '../models/MainPageModel';
 import { MainPageView } from '../views/MainPageView';
 import { BaseController } from './BaseController';
 
+import { SprintController } from './SprintController';
 export class MainPageController extends BaseController {
   model!: MainPageModel;
 
@@ -12,6 +12,7 @@ export class MainPageController extends BaseController {
     super(model, view);
 
     this.model.bindReRenderPage(this.onReRenderMainPage);
+    this.addOpenGameHandlers();
   }
 
   onReRenderMainPage = async (isAuthorized: boolean) => {
@@ -29,5 +30,16 @@ export class MainPageController extends BaseController {
     }
 
     this.view.bindMouseEventToNavItem(this.model.isAuthorized);
+  };
+
+  addOpenGameHandlers() {
+    const sprintGame = document.querySelector('.sprint');
+    sprintGame?.addEventListener('click', this.startSprintGame);
+  }
+
+  startSprintGame = () => {
+    const appSprint = new SprintController();
+    appSprint.renderMainStartPage();
+    appSprint.levelSelection();
   };
 }
