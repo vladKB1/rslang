@@ -3,6 +3,8 @@ import { User, signIn, makeRequest, createUser } from '../services/API';
 export class BaseModel {
   user!: object;
 
+  statePage = window.location.hash.slice(1);
+
   isAuthorized = false;
 
   onAuthorizationErrorTextChanged!: (newErrorText: string) => void;
@@ -12,6 +14,12 @@ export class BaseModel {
   constructor() {
     this.user = JSON.parse(localStorage.getItem('userData') as string) || {};
     this.isAuthorized = Boolean(Object.keys(this.user).length);
+    const hash = window.location.hash.slice(1);
+
+    if (hash !== 'authorization-popup' && hash !== 'logout') {
+      this.statePage = hash ? hash : 'mainPage';
+      window.location.hash = this.statePage;
+    }
   }
 
   #commit(dataName: string, data: object) {

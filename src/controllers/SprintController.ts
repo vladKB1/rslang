@@ -44,6 +44,7 @@ export class SprintController extends BaseController {
 
   mainSetup() {
     this.container = document.querySelector('.main') as HTMLElement;
+    this.container.classList.add('sprint');
     this.container.innerHTML = '';
     this.wrapper = this.view.createElement('div', 'sprint__field');
     this.wrapperCard = this.view.createElement('div', '.sprint-content__field');

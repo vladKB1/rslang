@@ -5,7 +5,7 @@ import { User } from '../services/API';
 
 export type MenuItem = {
   itemName: string;
-  itemClass: string;
+  id: string;
   nestedMenu: MenuItem[] | null;
 };
 
@@ -102,13 +102,14 @@ export class BaseView {
       const li = this.createElement('li');
       const boarder = this.createElement('div', 'nav-item');
 
-      const a = this.createElement('a', item.itemClass) as HTMLAnchorElement;
+      const a = this.createElement('a', item.id) as HTMLAnchorElement;
+      a.href = `#${item.id}`;
       a.textContent = item.itemName;
 
       boarder.append(a);
 
       if (item.nestedMenu) {
-        const nestedMenu = this.createMenu(`${item.itemClass}-menu`, item.nestedMenu);
+        const nestedMenu = this.createMenu(`${item.id}-menu`, item.nestedMenu);
         nestedMenu.classList.remove('navigation');
         nestedMenu.classList.add('sub-nav', 'un-shown');
         boarder.append(nestedMenu);
@@ -126,19 +127,19 @@ export class BaseView {
     header.id = 'header';
     const container = this.createElement('div', 'container', 'header-container');
 
-    const logo = this.createLogo('main-logo', '#main', 'RS Lang');
+    const logo = this.createLogo('main-logo', '#mainPage', 'RS Lang');
 
     const menu = this.createElement('nav', 'header-nav-container');
     menu.append(
       this.createMenu('main-menu', [
         {
           itemName: 'Учебник',
-          itemClass: 'textbook',
+          id: 'textbook',
           nestedMenu: isAuthorized
             ? [
                 {
                   itemName: 'Сложные слова',
-                  itemClass: 'text-book-difficult-words',
+                  id: 'textbook/difficult-words',
                   nestedMenu: null,
                 },
               ]
@@ -146,32 +147,27 @@ export class BaseView {
         },
         {
           itemName: 'Мини-игры',
-          itemClass: 'mini-games',
+          id: 'mainPage/mini-games',
           nestedMenu: [
             {
               itemName: 'Аудиовызов',
-              itemClass: 'game-audio',
+              id: 'game-audio',
               nestedMenu: null,
             },
             {
               itemName: 'Спринт',
-              itemClass: 'game-sprint',
+              id: 'game-sprint',
               nestedMenu: null,
             },
           ],
         },
         {
           itemName: 'О команде',
-          itemClass: 'about',
+          id: 'mainPage/about',
           nestedMenu: null,
         },
       ]),
     );
-
-    const miniGames = menu.querySelector('.mini-games') as HTMLAnchorElement;
-    miniGames.href = '#mini-games';
-    const aboutUs = menu.querySelector('.about') as HTMLAnchorElement;
-    aboutUs.href = '#aboutUs';
 
     container.append(logo, menu);
 
@@ -194,12 +190,12 @@ export class BaseView {
       const subNav = this.createMenu('user-menu', [
         {
           itemName: 'Статистика',
-          itemClass: 'statistics',
+          id: 'statistics',
           nestedMenu: null,
         },
         {
           itemName: 'Выход',
-          itemClass: 'logout',
+          id: 'logout',
           nestedMenu: null,
         },
       ]);

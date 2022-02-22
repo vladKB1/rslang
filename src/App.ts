@@ -20,28 +20,51 @@ export default class App {
   controller!: Controller;
 
   init() {
-    this.model = new SprintModel();
-    this.view = new SprintView(this.model.isAuthorized);
-    this.controller = new SprintController(this.model as SprintModel, this.view as SprintView);
-
-    // window.addEventListener('hashchange', this.navigate);
-    // this.navigate();
+    window.addEventListener('hashchange', this.navigate);
+    this.navigate();
   }
 
-  // navigate = () => {
-  //   const path = window.location.hash.slice(1).split('/');
+  navigate = () => {
+    let path = window.location.hash.slice(1).split('/');
 
-  //   switch (path[0]) {
-  //     case 'sprint':
-  //       break;
-  //     default:
-  //       // this.model = new MainPageModel();
-  //       // this.view = new MainPageView(this.model.isAuthorized);
-  //       // this.controller = new MainPageController(this.model as MainPageModel, this.view as MainPageView);
+    if (this.model?.statePage.split('/')[0] === path[0]) {
+      return;
+    }
 
-  //       this.model = new SprintModel();
-  //       this.view = new SprintView(this.model.isAuthorized);
-  //       this.controller = new SprintController(this.model as SprintModel, this.view as SprintView);
-  //   }
-  // };
+    if (path[0] === 'header') {
+      path = (this.model?.statePage ? this.model.statePage : 'mainPage').split('/');
+      window.location.hash = path.join('/');
+      return;
+    }
+
+    const isPopUp = path[0] === 'authorization-popup';
+    const isLogOut = path[0] === 'logout';
+
+    if ((isPopUp || isLogOut) && !this.view) {
+      path = (this.model?.statePage ? this.model.statePage : 'mainPage').split('/');
+      window.location.hash = path.toString();
+    } else if (isPopUp || isLogOut) {
+      return;
+    }
+
+    switch (path[0]) {
+      case '':
+      case 'mainPage':
+        this.model = new MainPageModel();
+        this.view = new MainPageView(this.model.isAuthorized);
+        this.controller = new MainPageController(this.model as MainPageModel, this.view as MainPageView);
+        break;
+      case 'textbook':
+        break;
+      case 'game-sprint':
+        this.model = new SprintModel();
+        this.view = new SprintView(this.model.isAuthorized);
+        this.controller = new SprintController(this.model as SprintModel, this.view as SprintView);
+        break;
+      case 'game-audio':
+        break;
+      case 'statistics':
+        break;
+    }
+  };
 }
