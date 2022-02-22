@@ -1,4 +1,6 @@
-import { baseUrl, Word } from '../models/SprintModel';
+import { Word } from '../models/SprintModel';
+import { baseUrl } from '../services/API';
+
 import { BaseView } from './BaseView';
 
 export class SprintView extends BaseView {
@@ -83,7 +85,7 @@ export class SprintView extends BaseView {
     return `
     <div class="sprint__result-list__item">
       <span class="audio-icon__container">
-        <button class="icon-audio" data-audio-src="${baseUrl + word.audio}"><img class="icon-sound">
+        <button class="icon-audio" data-audio-src="${baseUrl + '/' + word.audio}"><img class="icon-sound">
         </button>
         <span class="sprint__result__word">${word.word}</span>
         <span> - </span>

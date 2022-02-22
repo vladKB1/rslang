@@ -1,5 +1,5 @@
-export const baseUrl = 'https://react-learnwords-example.herokuapp.com/';
 import { BaseModel } from './BaseModel';
+import { makeRequest, getWords } from '../services/API';
 
 export interface Word {
   id: string;
@@ -27,10 +27,10 @@ export class SprintModel extends BaseModel {
   }
 
   getWordsForLevel(level: number, page?: number) {
-    return fetch(`${baseUrl}words?group=${level}&page=${page}`)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => (this.words = data));
+    const queryParams = [];
+    queryParams.push({ key: 'group', value: level.toString() });
+    if (page) queryParams.push({ key: 'page', value: page.toString() });
+
+    return makeRequest(getWords(queryParams), getWords.name).then((data: Word[]) => (this.words = data));
   }
 }
