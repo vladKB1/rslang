@@ -126,6 +126,31 @@ export class SprintController extends BaseController {
       });
       return;
     }
+
+    const word = this.model.words[Math.floor(Math.random() * this.model.words.length)];
+    const word2 = this.model.words[Math.floor(Math.random() * this.model.words.length)];
+
+    const alreadyAnswered = this.correctAnswers.find((element: Word) => {
+      if (element.word === word.word) {
+        return true;
+      }
+    });
+
+    const alreadyAnswered2 = this.incorrectAnswers.find((element: Word) => {
+      if (element.word === word.word) {
+        return true;
+      }
+    });
+    if (alreadyAnswered || alreadyAnswered2) {
+      return this.getRandomWord();
+    }
+    this.correctTranslation = word.wordTranslate;
+    if (Math.random() > 0.5) {
+      word.wordTranslateOnCard = word2.wordTranslate;
+    } else {
+      word.wordTranslateOnCard = word.wordTranslate;
+    }
+    this.currentWord = word;
   }
 
   startTimer(): void {
