@@ -12,7 +12,7 @@ export class BaseModel {
   onReRenderPage!: (isAuthorized: boolean) => void;
 
   constructor() {
-    this.user = JSON.parse(localStorage.getItem('userData') as string) || {};
+    this.user = JSON.parse(localStorage.getItem('userData')?.toString() || '{}');
     this.isAuthorized = Boolean(Object.keys(this.user).length);
     const hash = window.location.hash.slice(1);
 
