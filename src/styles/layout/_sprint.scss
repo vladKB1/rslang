@@ -2,13 +2,11 @@
   display: none !important;
 }
 
-/* body {
-  background-image: url('../images/background-1.jpg');
-  background-repeat: no-repeat;
-  background-size: 100%;
-  margin: 0;
-  overflow-x: hidden;
-} */
+.main {
+  background-color: $sprint-main-background;
+  padding-top: 70px;
+  height: 100vh;
+}
 
 .sprint__header {
   display: flex;
@@ -47,7 +45,7 @@
 .sprint__field {
   margin: 0 auto;
   padding: 20px;
-  background-color: #2e9e8a;
+  background-color: $sprint-main-background;
   opacity: 0.8;
   border-radius: 10px;
   width: 63vw;

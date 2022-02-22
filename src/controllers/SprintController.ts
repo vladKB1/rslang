@@ -52,6 +52,7 @@ export class SprintController extends BaseController {
     this.correctAnswers = [];
     this.incorrectAnswers = [];
 
+    this.renderHeaderStartPage();
     this.renderMainStartPage();
     this.bindLevelSelection();
   }
