@@ -1,10 +1,11 @@
+import { BaseController } from './BaseController';
 import { SprintView } from '../views/SprintView';
 import { Word, SprintModel } from '../models/SprintModel';
 
-export class SprintController {
-  view: SprintView;
+export class SprintController extends BaseController {
+  view!: SprintView;
 
-  model: SprintModel;
+  model!: SprintModel;
 
   container: HTMLElement;
 
@@ -30,9 +31,8 @@ export class SprintController {
 
   currentPage: number;
 
-  constructor(level = 0, page = 0) {
-    this.view = new SprintView();
-    this.model = new SprintModel();
+  constructor(model: SprintModel, view: SprintView, level = 0, page = 0) {
+    super(model, view);
 
     this.currentLevel = level;
     this.currentPage = page;
@@ -45,6 +45,15 @@ export class SprintController {
     this.score = 0;
     this.correctAnswers = [];
     this.incorrectAnswers = [];
+
+    this.renderMainStartPage();
+    this.bindLevelSelection();
+  }
+
+  makeStartSetup(isAuthorized: boolean) {
+    this.view.renderSprintPage(isAuthorized);
+    this.renderMainStartPage();
+    this.bindLevelSelection();
   }
 
   renderHeaderStartPage() {
@@ -84,7 +93,7 @@ export class SprintController {
     this.addPlayWordHandler();
   }
 
-  levelSelection() {
+  bindLevelSelection() {
     const btnSelection = document.querySelector('.level_button_container') as HTMLElement;
     btnSelection.addEventListener('click', (e: Event) => {
       this.currentLevel = Number((e.target as HTMLElement).innerHTML) - 1;
@@ -117,31 +126,6 @@ export class SprintController {
       });
       return;
     }
-
-    const word = this.model.words[Math.floor(Math.random() * this.model.words.length)];
-    const word2 = this.model.words[Math.floor(Math.random() * this.model.words.length)];
-
-    const alreadyAnswered = this.correctAnswers.find((element: Word) => {
-      if (element.word === word.word) {
-        return true;
-      }
-    });
-
-    const alreadyAnswered2 = this.incorrectAnswers.find((element: Word) => {
-      if (element.word === word.word) {
-        return true;
-      }
-    });
-    if (alreadyAnswered || alreadyAnswered2) {
-      return this.getRandomWord();
-    }
-    this.correctTranslation = word.wordTranslate;
-    if (Math.random() > 0.5) {
-      word.wordTranslateOnCard = word2.wordTranslate;
-    } else {
-      word.wordTranslateOnCard = word.wordTranslate;
-    }
-    this.currentWord = word;
   }
 
   startTimer(): void {

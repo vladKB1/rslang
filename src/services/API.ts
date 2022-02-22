@@ -1,21 +1,32 @@
-const baseUrl = 'https://react-learnwords-example.herokuapp.com';
-
-const path = {
-  users: '/users',
-  signin: '/signin',
-};
+export type RequestFunction = (user: User) => Promise<Response>;
 
 export type User = {
   email: string;
   password: string;
 };
 
-export type RequestFunction = (user: User) => Promise<Response>;
+export type Query = {
+  key: string;
+  value: string;
+};
 
 export type RequestData = User;
 
+const baseUrl = 'https://react-learnwords-example.herokuapp.com';
+
+const path = {
+  users: '/users',
+  signin: '/signin',
+  words: '/words',
+};
+
+const generateQueryString = (queryParams: Query[]) => {
+  if (!queryParams.length) return '';
+  return `?${queryParams.map((x) => `${x.key}=${x.value}`).join('&')}`;
+};
+
 export const createUser = async (user: User) => {
-  const rawResponse = await fetch(`${baseUrl}${path.users}`, {
+  return fetch(`${baseUrl}${path.users}`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -23,12 +34,10 @@ export const createUser = async (user: User) => {
     },
     body: JSON.stringify(user),
   });
-
-  return rawResponse;
 };
 
 export const signIn = async (user: User) => {
-  const rawResponse = await fetch(`${baseUrl}${path.signin}`, {
+  return fetch(`${baseUrl}${path.signin}`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -36,8 +45,10 @@ export const signIn = async (user: User) => {
     },
     body: JSON.stringify(user),
   });
+};
 
-  return rawResponse;
+export const getWordsForLevel = async (queryParams: Query[]) => {
+  return fetch(`${baseUrl}${path.words}${generateQueryString(queryParams)}`, {});
 };
 
 export const makeRequest = async (action: RequestFunction, data: RequestData) => {

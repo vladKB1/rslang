@@ -1,4 +1,5 @@
 import { BaseView } from './BaseView';
+
 import backgroundImageSource from '../assets/images/svg/description-main.svg';
 import textBookImg from '../assets/images/svg/description-text-book.svg';
 import sprintImg from '../assets/images/svg/sprint.svg';

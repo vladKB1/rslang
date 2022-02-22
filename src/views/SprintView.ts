@@ -1,15 +1,15 @@
 import { baseUrl, Word } from '../models/SprintModel';
+import { BaseView } from './BaseView';
 
-export class SprintView {
-  createElement(tag: string, className: string): HTMLElement {
-    const element = document.createElement(tag);
-    if (className) element.classList.add(className);
-    return element;
+export class SprintView extends BaseView {
+  constructor(isAuthorized: boolean) {
+    super(isAuthorized);
+    this.footer.remove();
   }
 
-  getElement(selector: string) {
-    const element = document.querySelector(selector);
-    return element;
+  renderSprintPage(isAuthorized: boolean) {
+    this.reRenderBasePage(isAuthorized);
+    this.footer.remove();
   }
 
   getHeaderTemplate() {

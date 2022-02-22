@@ -1,4 +1,5 @@
 export const baseUrl = 'https://react-rslang-team15.herokuapp.com/';
+import { BaseModel } from './BaseModel';
 
 export interface Word {
   id: string;
@@ -18,16 +19,16 @@ export interface Word {
   wordTranslateOnCard?: string;
 }
 
-export class SprintModel {
+export class SprintModel extends BaseModel {
   words!: Word[];
+
+  constructor() {
+    super();
+  }
 
   getWordsForLevel(level: number, page?: number) {
     return fetch(`${baseUrl}words?page=${page}&group=${level}`)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        this.words = data;
-      });
+      .then((response) => response.json())
+      .then((data) => (this.words = data));
   }
 }
