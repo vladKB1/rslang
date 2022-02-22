@@ -1,5 +1,3 @@
-//export type RequestFunction = ((user: User) => Promise<Response>) | ((queryParams: Query[]) => Promise<Response>);
-
 export enum STATUS {
   OK = 200,
   BAD_REQUEST = 400,
@@ -71,45 +69,46 @@ export const getWords = (queryParams: Query[]) => {
 };
 
 export const makeRequest = async (requestObject: RequestObject, requestName: string) => {
+  let rawResponse = null;
   try {
-    const rawResponse = await fetch(requestObject.url, {
+    rawResponse = await fetch(requestObject.url, {
       method: requestObject.method,
       headers: requestObject.headers,
       body: requestObject.body,
     });
-
-    const content = rawResponse.ok ? await rawResponse.json() : null;
-    const status = rawResponse.status;
-
-    switch (requestName) {
-      case 'createUser': {
-        switch (status) {
-          case STATUS.OK:
-            return content;
-          case STATUS.EXPECTATION_FAILED:
-            throw new Error('Пользователь уже существует.');
-          case STATUS.UNPROCESSABLE_ENTITY:
-            throw new Error('Некорректная почта или пароль.');
-          default:
-            throw new Error('Произошла непредвиденная ошибка!');
-        }
-      }
-      case 'signIn': {
-        if (status === STATUS.OK) {
-          return content;
-        } else {
-          throw new Error('Неверная почта или пароль.');
-        }
-      }
-      case 'getWords': {
-        if (status == STATUS.OK) {
-          return content;
-        } else {
-          throw new Error('Возникла ошибка при обращении к серверу.');
-        }
-      }
-    }
   } catch (error) {
     console.log('Возникла проблема с fetch запросом: ', (error as Error).message);
+  }
+
+  const content = rawResponse?.ok ? await rawResponse.json() : null;
+  const status = rawResponse?.status;
+
+  switch (requestName) {
+    case 'createUser': {
+      switch (status) {
+        case STATUS.OK:
+          return content;
+        case STATUS.EXPECTATION_FAILED:
+          throw new Error('Пользователь уже существует.');
+        case STATUS.UNPROCESSABLE_ENTITY:
+          throw new Error('Некорректная почта или пароль.');
+        default:
+          throw new Error('Произошла непредвиденная ошибка!');
+      }
+    }
+    case 'signIn': {
+      if (status === STATUS.OK) {
+        return content;
+      } else {
+        throw new Error('Неверная почта или пароль.');
+      }
+    }
+    case 'getWords': {
+      if (status == STATUS.OK) {
+        return content;
+      } else {
+        throw new Error('Возникла ошибка при обращении к серверу.');
+      }
+    }
   }
 };
