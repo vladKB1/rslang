@@ -28,7 +28,7 @@ export class BaseModel {
 
   async signInUser(user: User) {
     try {
-      const content = await makeRequest(signIn(user), signIn.name);
+      const content = await makeRequest(signIn(user), 'signIn');
       this.onAuthorizationErrorTextChanged('');
 
       this.#commit('userData', content);
@@ -45,7 +45,7 @@ export class BaseModel {
 
   async signUpUser(user: User) {
     try {
-      await makeRequest(createUser(user), createUser.name);
+      await makeRequest(createUser(user), 'createUser');
       this.onAuthorizationErrorTextChanged('');
     } catch (error) {
       const errorMessage = (error as Error).message;

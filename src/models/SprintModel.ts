@@ -31,6 +31,6 @@ export class SprintModel extends BaseModel {
     queryParams.push({ key: 'group', value: level.toString() });
     if (page) queryParams.push({ key: 'page', value: page.toString() });
 
-    return makeRequest(getWords(queryParams), getWords.name).then((data: Word[]) => (this.words = data));
+    return makeRequest(getWords(queryParams), 'getWords').then((data: Word[]) => (this.words = data));
   }
 }
