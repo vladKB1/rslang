@@ -1,6 +1,7 @@
 body {
+  position: relative;
   font-family: $main-font, 'sans-serif';
-  font-size: 18px;
+  font-size: 18px; 
 }
 
 .container {
@@ -10,10 +11,16 @@ body {
 }
 
 .hidden {
+  display: hidden;
+}
+
+.un-shown {
+  position: absolute;
   opacity: 0;
+  visibility: hidden;
   width: 0;
-  height: 0;
-  overflow: hidden;
+  height: 0;  
+  transition: none; 
 }
 
 .title {

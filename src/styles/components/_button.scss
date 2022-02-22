@@ -12,4 +12,8 @@
   &:active {
     background-color: $active-button;
   }
+
+  &:visited {
+    color: white;
+  }
 }

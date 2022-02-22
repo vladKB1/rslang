@@ -1,4 +1,5 @@
 import { BaseView } from './BaseView';
+
 import backgroundImageSource from '../assets/images/svg/description-main.svg';
 import textBookImg from '../assets/images/svg/description-text-book.svg';
 import sprintImg from '../assets/images/svg/sprint.svg';
@@ -33,7 +34,8 @@ export class MainPageView extends BaseView {
     text.append(title, description);
 
     if (!isAuthorized) {
-      const logInButton = this.createElement('button', 'button', 'log-in-button');
+      const logInButton = this.createElement('a', 'button', 'log-in-button') as HTMLAnchorElement;
+      logInButton.href = '#authorization-popup';
       logInButton.textContent = 'Войти';
       text.append(logInButton);
     }
@@ -75,15 +77,17 @@ export class MainPageView extends BaseView {
 
     const games = this.createElement('div', 'games');
 
-    const sprintGame = this.createElement('div', 'game-card', 'sprint');
+    const sprintGame = this.createElement('a', 'game-card', 'sprint') as HTMLAnchorElement;
+    sprintGame.href = '#game-sprint';
     let title = this.createElement('h2', 'game-card-title');
-    let image = this.createImage(sprintImg, 'sprintImg', 'game-card-img', 'sprint-img');
+    let image = this.createImage(sprintImg, 'sprintImg', 'game-card-img', 'sprint__img');
     title.textContent = 'Спринт';
     sprintGame.append(title, image);
 
-    const audioGame = this.createElement('div', 'game-card', 'audio-call');
+    const audioGame = this.createElement('a', 'game-card', 'audio-call') as HTMLAnchorElement;
+    audioGame.href = '#game-audio';
     title = this.createElement('h2', 'game-card-title');
-    image = this.createImage(audioCallImg, 'audioCallImg', 'game-card-img', 'audio-call-img');
+    image = this.createImage(audioCallImg, 'audioCallImg', 'game-card-img', 'audio-call__img');
     title.textContent = 'Аудиовызов';
     audioGame.append(title, image);
 
@@ -153,8 +157,9 @@ export class MainPageView extends BaseView {
     return container;
   }
 
-  renderMainPage(isAuthorized: boolean): void {
+  async renderMainPage(isAuthorized: boolean) {
     const sectionRsLang = this.createElement('section', 'rslang-description');
+    sectionRsLang.id = 'mainPage';
     const backgroundImage = this.createImage(backgroundImageSource, '', 'description-background-img');
 
     sectionRsLang.append(backgroundImage, this.createSectionRsLang(isAuthorized));
@@ -165,13 +170,18 @@ export class MainPageView extends BaseView {
     this.main.append(sectionTextBook);
 
     const sectionMiniGames = this.createElement('section', 'mini-games');
-    sectionMiniGames.id = 'mini-games';
+    sectionMiniGames.id = 'mainPage/mini-games';
     sectionMiniGames.append(this.createSectionMiniGames());
     this.main.append(sectionMiniGames);
 
     const sectionAboutUs = this.createElement('section', 'about-us');
-    sectionAboutUs.id = 'aboutUs';
+    sectionAboutUs.id = 'mainPage/about';
     sectionAboutUs.append(this.createSectionAboutUs());
     this.main.append(sectionAboutUs);
+  }
+
+  async reRenderMainPage(isAuthorized: boolean) {
+    await this.reRenderBasePage(isAuthorized);
+    await this.renderMainPage(isAuthorized);
   }
 }

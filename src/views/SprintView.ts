@@ -1,15 +1,12 @@
-import { baseUrl, Word } from './sprintModel';
+import { Word } from '../models/SprintModel';
+import { baseUrl } from '../services/API';
 
-export class SprintView {
-  createElement(tag: string, className: string): HTMLElement {
-    const element = document.createElement(tag);
-    if (className) element.classList.add(className);
-    return element;
-  }
+import { BaseView } from './BaseView';
 
-  getElement(selector: string) {
-    const element = document.querySelector(selector);
-    return element;
+export class SprintView extends BaseView {
+  constructor(isAuthorized: boolean) {
+    super(isAuthorized);
+    this.footer.remove();
   }
 
   getHeaderTemplate() {
@@ -45,10 +42,10 @@ export class SprintView {
       </div>`;
   }
 
-  getCardTimeTemlate() {
+  getCardTimeTemplate() {
     return `
-    <div class="sprint-conten">
-    <div class="sprint-conten__header">
+    <div class="sprint-content">
+    <div class="sprint-content__header">
       <div class="sprint-content__clock" id="timer"></div>
       <div class="sprint-content__counter" id="score"></div>
     </div>`;
@@ -88,7 +85,7 @@ export class SprintView {
     return `
     <div class="sprint__result-list__item">
       <span class="audio-icon__container">
-        <button class="icon-audio" data-audio-src="${baseUrl + word.audio}"><img class="icon-sound">
+        <button class="icon-audio" data-audio-src="${baseUrl + '/' + word.audio}"><img class="icon-sound">
         </button>
         <span class="sprint__result__word">${word.word}</span>
         <span> - </span>
