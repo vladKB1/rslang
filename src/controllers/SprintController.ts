@@ -7,13 +7,13 @@ export class SprintController extends BaseController {
 
   model!: SprintModel;
 
-  container: HTMLElement;
+  container!: HTMLElement;
 
-  wrapper: HTMLElement;
+  wrapper!: HTMLElement;
 
-  time: number;
+  time!: number;
 
-  score: number;
+  score!: number;
 
   correctTranslation!: string;
 
@@ -23,11 +23,11 @@ export class SprintController extends BaseController {
 
   currentLevel!: number;
 
-  wrapperCard: HTMLElement;
+  wrapperCard!: HTMLElement;
 
-  correctAnswers: Word[];
+  correctAnswers!: Word[];
 
-  incorrectAnswers: Word[];
+  incorrectAnswers!: Word[];
 
   currentPage: number;
 
@@ -37,6 +37,12 @@ export class SprintController extends BaseController {
     this.currentLevel = level;
     this.currentPage = page;
 
+    this.mainSetup();
+
+    this.model.bindReRenderPage(this.onReRenderSprintPage);
+  }
+
+  mainSetup() {
     this.container = document.querySelector('.main') as HTMLElement;
     this.container.innerHTML = '';
     this.wrapper = this.view.createElement('div', 'sprint__field');
@@ -50,11 +56,17 @@ export class SprintController extends BaseController {
     this.bindLevelSelection();
   }
 
-  makeStartSetup(isAuthorized: boolean) {
-    this.view.renderSprintPage(isAuthorized);
-    this.renderMainStartPage();
-    this.bindLevelSelection();
+  ReRenderSprintPage(isAuthorized: boolean) {
+    this.view.reRenderBasePage(isAuthorized);
+    this.view.footer.remove();
+    this.bindBaseEvents();
+
+    this.mainSetup();
   }
+
+  onReRenderSprintPage = async (isAuthorized: boolean) => {
+    this.ReRenderSprintPage(isAuthorized);
+  };
 
   renderHeaderStartPage() {
     const sprintHeader = this.view.createElement('div', 'sprint__header');

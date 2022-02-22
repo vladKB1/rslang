@@ -7,11 +7,6 @@ export class SprintView extends BaseView {
     this.footer.remove();
   }
 
-  renderSprintPage(isAuthorized: boolean) {
-    this.reRenderBasePage(isAuthorized);
-    this.footer.remove();
-  }
-
   getHeaderTemplate() {
     return `
     <button class="sprint__header__button sprint__sound">

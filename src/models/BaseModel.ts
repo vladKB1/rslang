@@ -57,4 +57,8 @@ export class BaseModel {
   bindAuthorizationErrorTextChanged(callback: (newErrorText: string) => void) {
     this.onAuthorizationErrorTextChanged = callback;
   }
+
+  bindReRenderPage(callback: (isAuthorized: boolean) => void) {
+    this.onReRenderPage = callback;
+  }
 }

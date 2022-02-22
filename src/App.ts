@@ -20,24 +20,28 @@ export default class App {
   controller!: Controller;
 
   init() {
-    window.addEventListener('hashchange', this.navigate);
-    this.navigate();
+    this.model = new SprintModel();
+    this.view = new SprintView(this.model.isAuthorized);
+    this.controller = new SprintController(this.model as SprintModel, this.view as SprintView);
+
+    // window.addEventListener('hashchange', this.navigate);
+    // this.navigate();
   }
 
-  navigate = () => {
-    const path = window.location.hash.slice(1).split('/');
+  // navigate = () => {
+  //   const path = window.location.hash.slice(1).split('/');
 
-    switch (path[0]) {
-      case 'sprint':
-        break;
-      default:
-        // this.model = new MainPageModel();
-        // this.view = new MainPageView(this.model.isAuthorized);
-        // this.controller = new MainPageController(this.model as MainPageModel, this.view as MainPageView);
+  //   switch (path[0]) {
+  //     case 'sprint':
+  //       break;
+  //     default:
+  //       // this.model = new MainPageModel();
+  //       // this.view = new MainPageView(this.model.isAuthorized);
+  //       // this.controller = new MainPageController(this.model as MainPageModel, this.view as MainPageView);
 
-        this.model = new SprintModel();
-        this.view = new SprintView(this.model.isAuthorized);
-        this.controller = new SprintController(this.model as SprintModel, this.view as SprintView);
-    }
-  };
+  //       this.model = new SprintModel();
+  //       this.view = new SprintView(this.model.isAuthorized);
+  //       this.controller = new SprintController(this.model as SprintModel, this.view as SprintView);
+  //   }
+  // };
 }
