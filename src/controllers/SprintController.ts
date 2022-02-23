@@ -29,16 +29,24 @@ export class SprintController extends BaseController {
 
   incorrectAnswers!: Word[];
 
-  currentPage: number;
+  currentPage!: number;
 
-  constructor(model: SprintModel, view: SprintView, level = 0, page = 0) {
+  levelSelectSkipped!: boolean;
+
+  timerId!: ReturnType<typeof setTimeout>;
+
+  constructor(model: SprintModel, view: SprintView, level?: number | undefined, page?: number | undefined) {
     super(model, view);
-
-    this.currentLevel = level;
-    this.currentPage = page;
+    if (level !== undefined && page !== undefined) {
+      this.currentLevel = level;
+      this.currentPage = page;
+      this.levelSelectSkipped = true;
+    } else {
+      this.currentLevel = 0;
+      this.currentPage = 0;
+    }
 
     this.mainSetup();
-
     this.model.bindReRenderPage(this.onReRenderSprintPage);
   }
 
@@ -52,17 +60,24 @@ export class SprintController extends BaseController {
     this.score = 0;
     this.correctAnswers = [];
     this.incorrectAnswers = [];
-
     this.renderHeaderStartPage();
-    this.renderMainStartPage();
-    this.bindLevelSelection();
+
+    if (!this.levelSelectSkipped) {
+      this.renderMainStartPage();
+      this.bindLevelSelection();
+    } else {
+      this.model.getWordsForLevel(this.currentLevel, this.currentPage).then(() => {
+        this.renderBlockTimer();
+        this.renderBlockCard();
+        this.startTimer();
+      });
+    }
   }
 
   ReRenderSprintPage(isAuthorized: boolean) {
     this.view.reRenderBasePage(isAuthorized);
     this.view.footer.remove();
     this.bindBaseEvents();
-
     this.mainSetup();
   }
 
@@ -83,6 +98,7 @@ export class SprintController extends BaseController {
 
   showPageResultSprint() {
     this.wrapper.innerHTML = '';
+
     this.wrapper.innerHTML = this.view.getPageResult(
       this.correctAnswers.length,
       this.incorrectAnswers.length,
@@ -126,17 +142,33 @@ export class SprintController extends BaseController {
   }
 
   renderBlockCard() {
-    this.getRandomWord().then(() => {
-      this.wrapperCard.innerHTML = this.view.getCardWordTemplate(this.currentWord);
-      this.wrapper.appendChild(this.wrapperCard);
-      this.addClickHandler();
-    });
+    this.getRandomWord(Promise.resolve, Promise.reject)
+      .then(() => {
+        this.wrapperCard.innerHTML = this.view.getCardWordTemplate(this.currentWord);
+        this.wrapper.appendChild(this.wrapperCard);
+        this.addClickHandler();
+      })
+      .catch(() => {});
   }
 
-  private async getRandomWord(): Promise<void> {
-    if (this.correctAnswers.length + this.incorrectAnswers.length === this.currentPage * 20 + 20) {
-      this.currentPage++;
-      await this.model.getWordsForLevel(this.currentLevel, this.currentPage);
+  private async getRandomWord(resolve: () => void, reject: () => void): Promise<void> {
+    const answersLength = this.correctAnswers.length + this.incorrectAnswers.length;
+    if (this.levelSelectSkipped) {
+      if (answersLength && answersLength % 20 === 0) {
+        this.currentPage--;
+        if (this.currentPage === -1) {
+          clearTimeout(this.timerId);
+          this.showPageResultSprint();
+          reject();
+        }
+
+        await this.model.getWordsForLevel(this.currentLevel, this.currentPage);
+      }
+    } else {
+      if (answersLength && answersLength % 20 === 0) {
+        this.currentPage++;
+        await this.model.getWordsForLevel(this.currentLevel, this.currentPage);
+      }
     }
 
     const word = this.model.words[Math.floor(Math.random() * this.model.words.length)];
@@ -154,7 +186,7 @@ export class SprintController extends BaseController {
       }
     });
     if (alreadyAnswered || alreadyAnswered2) {
-      return this.getRandomWord();
+      return this.getRandomWord(resolve, reject);
     }
 
     this.correctTranslation = word.wordTranslate;
@@ -168,14 +200,14 @@ export class SprintController extends BaseController {
 
   startTimer(): void {
     const timerNode = document.getElementById('timer');
-    let timerId;
+
     if (timerNode) {
       timerNode.innerText = `${this.time--}`;
       if (this.time < 0) {
-        clearTimeout(timerId);
+        clearTimeout(this.timerId);
         this.showPageResultSprint();
       } else {
-        timerId = setTimeout(() => {
+        this.timerId = setTimeout(() => {
           this.startTimer();
         }, 1000);
       }
@@ -196,7 +228,6 @@ export class SprintController extends BaseController {
     const btnAnswer = document.querySelector('.sprint-content__field__buttons') as HTMLElement;
     btnAnswer.addEventListener(
       'click',
-
       (event: Event) => {
         const correctPressed = (event.target as HTMLElement).classList.contains('field__btn__true');
         const translateCorrect = this.currentWord.wordTranslateOnCard === this.correctTranslation;
@@ -220,7 +251,6 @@ export class SprintController extends BaseController {
       const correctPressed = event.code === 'ArrowRight';
       const translateCorrect = this.currentWord.wordTranslateOnCard === this.correctTranslation;
       const answerIsCorrect = (correctPressed && translateCorrect) || (!correctPressed && !translateCorrect);
-
       if (answerIsCorrect) {
         this.updateScore(10);
         this.correctAnswers.push(this.currentWord);

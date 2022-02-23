@@ -26,10 +26,14 @@ export class SprintModel extends BaseModel {
     super();
   }
 
-  getWordsForLevel(level: number, page?: number) {
+  getWordsForLevel(level: number, page = 0) {
     const queryParams = [];
-    queryParams.push({ key: 'group', value: level.toString() });
-    if (page) queryParams.push({ key: 'page', value: page.toString() });
+    if (level?.toString() !== 'undefined') {
+      queryParams.push({ key: 'group', value: level.toString() });
+    }
+    if (page?.toString() !== 'undefined' || page?.toString() !== 'NaN') {
+      queryParams.push({ key: 'page', value: page?.toString() });
+    }
 
     return makeRequest(getWords(queryParams), 'getWords').then((data: Word[]) => (this.words = data));
   }
