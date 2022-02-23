@@ -70,10 +70,19 @@ export class MainPageView extends BaseView {
     MiniGamesTitle.textContent = 'Мини-игры';
 
     const description = this.createElement('div', 'mini-games-description');
-    const p = this.createElement('p', 'description');
-    p.textContent =
-      'Lorem ipsum dolor sit amet consectetur adipiscing elit et, posuere egestas ac cras nullam curae efficitur accumsan eros, tellus penatibus aliquam phasellus maximus aliquet nisi. Efficitur neque ridiculus amet hendrerit ex natoque parturient gravida at fringilla, condimentum imperdiet accumsan mollis eros proin himenaeos bibendum felis nisi, mus placerat commodo elementum feugiat orci justo platea nam. Consectetur mus turpis quis eleifend nullam velit quisque netus risus nisi sagittis felis ornare himenaeos phasellus, mi enim venenatis aenean senectus convallis sed est nam dignissim taciti ut placerat eget.';
-    description.append(p);
+    const p1 = this.createElement('p', 'description');
+    const p2 = this.createElement('p', 'description');
+    const p3 = this.createElement('p', 'description');
+    const p4 = this.createElement('p', 'description');
+    p1.textContent =
+      'Lorem ipsum dolor sit amet consectetur adipiscing elit et, posuere egestas ac cras nullam curae efficitur accumsan eros, tellus penatibus aliquam phasellus maximus aliquet nisi.';
+    p2.textContent =
+      'Efficitur neque ridiculus amet hendrerit ex natoque parturient gravida at fringilla, condimentum imperdiet accumsan mollis eros proin himenaeos bibendum felis nisi, mus placerat commodo elementum feugiat orci justo platea nam.';
+    p3.textContent =
+      'Consectetur mus turpis quis eleifend nullam velit quisque netus risus nisi sagittis felis ornare himenaeos phasellus, mi enim venenatis aenean senectus convallis sed est nam dignissim taciti ut placerat eget.';
+    p4.textContent =
+      'Consectetur mus turpis quis eleifend nullam velit quisque netus risus nisi sagittis felis ornare himenaeos phasellus, mi enim venenatis aenean senectus convallis sed est nam dignissim taciti ut placerat eget.';
+    description.append(MiniGamesTitle, p1, p2, p3, p4);
 
     const games = this.createElement('div', 'games');
 
@@ -93,7 +102,7 @@ export class MainPageView extends BaseView {
 
     games.append(sprintGame, audioGame);
 
-    div.append(MiniGamesTitle, description, games);
+    div.append(description, games);
 
     return div;
   }
@@ -131,7 +140,7 @@ export class MainPageView extends BaseView {
     about.append(
       this.createTeamMate({
         photo: vladKB1,
-        name: 'Влад',
+        name: 'Владислав',
         gitHub: 'https://github.com/vladKB1',
         about: 'Главная страница, авторизация, учебник, статистика',
       }),
