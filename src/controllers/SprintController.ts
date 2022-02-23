@@ -126,19 +126,17 @@ export class SprintController extends BaseController {
   }
 
   renderBlockCard() {
-    this.getRandomWord();
-    this.wrapperCard.innerHTML = this.view.getCardWordTemplate(this.currentWord);
-    this.wrapper.appendChild(this.wrapperCard);
-    this.addClickHandler();
+    this.getRandomWord().then(() => {
+      this.wrapperCard.innerHTML = this.view.getCardWordTemplate(this.currentWord);
+      this.wrapper.appendChild(this.wrapperCard);
+      this.addClickHandler();
+    });
   }
 
-  private getRandomWord(): void {
+  private async getRandomWord(): Promise<void> {
     if (this.correctAnswers.length + this.incorrectAnswers.length === this.currentPage * 20 + 20) {
       this.currentPage++;
-      this.model.getWordsForLevel(this.currentLevel, this.currentPage).then(() => {
-        this.getRandomWord();
-      });
-      return;
+      await this.model.getWordsForLevel(this.currentLevel, this.currentPage);
     }
 
     const word = this.model.words[Math.floor(Math.random() * this.model.words.length)];
@@ -158,6 +156,7 @@ export class SprintController extends BaseController {
     if (alreadyAnswered || alreadyAnswered2) {
       return this.getRandomWord();
     }
+
     this.correctTranslation = word.wordTranslate;
     if (Math.random() > 0.5) {
       word.wordTranslateOnCard = word2.wordTranslate;
