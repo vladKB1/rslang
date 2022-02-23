@@ -7,6 +7,9 @@ import { SprintController } from './controllers/SprintController';
 import { BaseModel } from './models/BaseModel';
 import { BaseView } from './views/BaseView';
 import { BaseController } from './controllers/BaseController';
+import { TextBookController } from './controllers/TextBookController';
+import { TextBookModel } from './models/TextBookModel';
+import { TextBookView } from './views/TextBookView';
 
 type Model = BaseModel | MainPageModel | SprintModel;
 type View = BaseView | MainPageView | SprintView;
@@ -55,6 +58,9 @@ export default class App {
         this.controller = new MainPageController(this.model as MainPageModel, this.view as MainPageView);
         break;
       case 'textbook':
+        this.model = new TextBookModel();
+        this.view = new TextBookView(this.model.isAuthorized);
+        this.controller = new TextBookController(this.model as TextBookModel, this.view as TextBookView);
         break;
       case 'game-sprint':
         this.model = new SprintModel();
