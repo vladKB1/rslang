@@ -4,7 +4,7 @@
 }
 
 .mini-games-container {
-  @include flex(space-between, $align: flex-start);  
+  @include flex(space-between);  
   
   .mini-games-description {
     @include flex($direction: column);
@@ -22,7 +22,9 @@
 
   .games {
     @include flex(space-around, center, column);  
-    width: 45%;          
+    align-content: center;
+    width: 45%;  
+    height: 100%;        
   }
 }
 
