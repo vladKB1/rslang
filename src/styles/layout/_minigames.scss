@@ -1,26 +1,42 @@
+.mini-games {
+  background-color: $mini-games-section-background;
+  padding: 30px 0;
+}
+
 .mini-games-container {
-  @include flex($direction: column);
-
-  .mini-games-title {
-    margin-bottom: 20px;
-  }
-
+  @include flex(space-between, $align: flex-start);  
+  
   .mini-games-description {
-    margin-bottom: 40px;
-  }
+    @include flex($direction: column);
+    width: 50%;    
+
+    .mini-games-title {
+      text-align: center;
+      margin-bottom: 20px;      
+    }
+
+    .description {
+      margin-bottom: 20px;
+    }
+  }  
 
   .games {
-    @include flex(space-around);
-    flex-wrap: wrap;
-    width: 100%;
+    @include flex(space-around, center, column);  
+    width: 45%;          
   }
 }
 
 .game-card {
   @include flex($direction: column);
-  width: 35vh;
-  height: 35vh;
+  width: 80%;
+  height: 25vh;
+  padding: 10px;
+  margin-bottom: 30px;
   border-radius: 15px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 
   .game-card-title {
     color: white;
@@ -33,10 +49,12 @@
   }
 }
 
+
 .sprint {  
-  background-color: $game-sprint-background;
+  background-color: $game-sprint-card-background;
 }
 
 .audio-call {
-  background-color: $game-audio-call-background;
+  background-color: $game-audio-call-card-background;
+  padding-bottom: 0;
 }

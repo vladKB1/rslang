@@ -1,21 +1,27 @@
 .footer {
   background: $footer-background;
   color: white;
+
+  .footer-container {
+    @include flex(space-between);
+    padding: 10px 30px;
+  }
+  
+  .github {
+    @include flex(space-around);
+
+    a {
+      color: white;
+    }
+
+    width: 60%;
+  }
+  
+  .rs-school-logo-img {
+    background: $not-active-nav;
+    border-radius: 15px;
+    padding: 7px;
+    width: 70px;  
+  }
 }
 
-.footer-container {
-  @include flex(space-between);
-  padding: 10px 30px;
-}
-
-.github {
-  @include flex(space-around);
-  width: 60%;
-}
-
-.rs-school-logo-img {
-  background: $not-active-nav;
-  border-radius: 15px;
-  padding: 7px;
-  width: 70px;  
-}
