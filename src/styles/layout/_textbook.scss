@@ -1,7 +1,8 @@
-.main {
+.textbook-page {
   @include flex(center);
   background-color: $textbook-main-background;
   height: 94vh;
+  padding-top: 7vh;
 }
 
 .textbook-container {
@@ -17,8 +18,8 @@
 
   .category {
     @include flex(center);
-    width: 25vh;
-    height: 20vh;
+    width: 30vh;
+    height: 22vh;
 
     background-color: $text-book-category-background;
     box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%), 0 4px 12px 0 rgb(0 0 0 / 6%);
@@ -32,7 +33,7 @@
   .difficult-words-category {
     grid-area: G;
     @include flex(center, center, column);
-    width: 81vh;
+    width: 96vh;
     height: 20vh;
 
     background-color: $text-book-category-background;
@@ -68,4 +69,10 @@
   .C2 {
     grid-area: F;
   }
+}
+
+
+.categoryPage {
+  @include flex(center);
+  padding-top: 70px;
 }
