@@ -1,0 +1,78 @@
+.textbook-page {
+  @include flex(center);
+  background-color: $textbook-main-background;
+  height: 94vh;
+  padding-top: 7vh;
+}
+
+.textbook-container {
+  display: grid;
+  grid-template-areas:
+  "A B C" "D E F" "G G G";
+
+  gap: 3vh 3vh;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+
+
+  .category {
+    @include flex(center);
+    width: 30vh;
+    height: 22vh;
+
+    background-color: $text-book-category-background;
+    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%), 0 4px 12px 0 rgb(0 0 0 / 6%);
+    border-radius: 15px;
+  }
+
+  .category-title {
+    font-size: 6vh;
+  }
+
+  .difficult-words-category {
+    grid-area: G;
+    @include flex(center, center, column);
+    width: 96vh;
+    height: 20vh;
+
+    background-color: $text-book-category-background;
+    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%), 0 4px 12px 0 rgb(0 0 0 / 6%);
+    border-radius: 15px;
+
+    .description {
+      font-size: 3vh;
+      text-align: center;
+    }
+  }
+
+  .A1 {
+    grid-area: A;
+  }
+
+  .B1 {
+    grid-area: B;
+  }
+
+  .C1 {
+    grid-area: C;
+  }
+
+  .A2 {
+    grid-area: D;
+  }
+
+  .B2 {
+    grid-area: E;
+  }
+
+  .C2 {
+    grid-area: F;
+  }
+}
+
+
+.categoryPage {
+  @include flex(center);
+  padding-top: 70px;
+}

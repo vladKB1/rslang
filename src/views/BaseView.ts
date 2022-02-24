@@ -145,7 +145,7 @@ export class BaseView {
             ? [
                 {
                   itemName: 'Сложные слова',
-                  id: 'textbook/difficult-words',
+                  id: 'textbook/7/1',
                   nestedMenu: null,
                 },
               ]
