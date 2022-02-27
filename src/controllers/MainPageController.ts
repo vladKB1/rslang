@@ -9,11 +9,5 @@ export class MainPageController extends BaseController {
 
   constructor(model: MainPageModel, view: MainPageView) {
     super(model, view);
-    this.model.bindReRenderPage(this.onReRenderMainPage);
   }
-
-  onReRenderMainPage = async (isAuthorized: boolean) => {
-    await this.view.reRenderMainPage(isAuthorized);
-    this.bindBaseEvents();
-  };
 }

@@ -1,6 +1,7 @@
 import { BaseController } from './BaseController';
 import { SprintView } from '../views/SprintView';
-import { Word, SprintModel } from '../models/SprintModel';
+import { SprintModel } from '../models/SprintModel';
+import { Word } from '../services/API';
 
 export class SprintController extends BaseController {
   view!: SprintView;
@@ -47,7 +48,6 @@ export class SprintController extends BaseController {
     }
 
     this.mainSetup();
-    this.model.bindReRenderPage(this.onReRenderSprintPage);
   }
 
   mainSetup() {
@@ -73,17 +73,6 @@ export class SprintController extends BaseController {
       });
     }
   }
-
-  ReRenderSprintPage(isAuthorized: boolean) {
-    this.view.reRenderBasePage(isAuthorized);
-    this.view.footer.remove();
-    this.bindBaseEvents();
-    this.mainSetup();
-  }
-
-  onReRenderSprintPage = async (isAuthorized: boolean) => {
-    this.ReRenderSprintPage(isAuthorized);
-  };
 
   renderHeaderStartPage() {
     const sprintHeader = this.view.createElement('div', 'sprint__header');

@@ -1,0 +1,55 @@
+.pagination-container {
+  position: fixed;
+  bottom: 10vh;  
+}
+
+.pagination {
+  @include flex(space-between);  
+  width: 40vw;
+  padding: 10px 30px;
+
+  background: $textbook-pagination-background;
+  border-radius: 50px;
+  box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%), 0 4px 12px 0 rgb(0 0 0 / 6%);
+
+  .pagination__arrow {
+    font-size: 20px;
+    font-weight: 700;    
+  }
+
+  .pagination__list {
+    @include flex(space-around);
+    width: 100%;
+
+    .pagination__list-dots {         
+      padding: 10px 18.4px;   
+      border-radius: 50%;      
+
+      &hover {
+        background: none;
+      }      
+    }
+
+    .pagination__list-item {      
+      display: block;     
+      padding: 10px 18.4px;   
+      border-radius: 50%;
+      cursor: pointer;
+      
+      &:hover {
+        background: $not-active-pagination-item;        
+      }      
+    }        
+
+    .active-page {
+      color: white;
+      background: $active-pagination-item;
+    }
+  }
+  
+}
+
+.not-active-arrow {
+  color: $not-active-pagination-item;
+  
+}
