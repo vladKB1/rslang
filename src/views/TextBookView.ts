@@ -12,7 +12,8 @@ export class TextBookView extends BaseView {
       this.renderTextBook(isAuthorized);
     } else {
       this.renderTextBookCategory(words, isAuthorized, category as number, page as number);
-      this.renderPagination(30, category, page);
+      if (category !== 7) this.renderPagination(30, category, page);
+      this.renderTextBookButton();
     }
   }
 
@@ -48,6 +49,19 @@ export class TextBookView extends BaseView {
     }
 
     container.append(difficultWords);
+    this.main.append(container);
+  }
+
+  renderTextBookCategory(words: Word[], isAuthorized: boolean, category: number, page: number) {
+    this.main.classList.add('textbook-page');
+    const container = this.createElement('div', 'categoryPage');
+    words.forEach((word) => {
+      const p = this.createElement('p', 'word');
+      p.textContent = word.word;
+      container.append(p);
+    });
+    console.log(isAuthorized, category, page);
+
     this.main.append(container);
   }
 
@@ -124,16 +138,9 @@ export class TextBookView extends BaseView {
     this.main.append(container);
   }
 
-  renderTextBookCategory(words: Word[], isAuthorized: boolean, category: number, page: number) {
-    this.main.classList.add('textbook-page');
-    const container = this.createElement('div', 'categoryPage');
-    words.forEach((word) => {
-      const p = this.createElement('p', 'word');
-      p.textContent = word.word;
-      container.append(p);
-    });
-    console.log(isAuthorized, category, page);
-
-    this.main.append(container);
+  renderTextBookButton() {
+    const returnToTextBook = this.createElement('a', 'retrun-to-textbook') as HTMLAnchorElement;
+    returnToTextBook.href = '#textbook';
+    this.main.append(returnToTextBook);
   }
 }
