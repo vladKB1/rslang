@@ -108,9 +108,20 @@ export default class App {
           window.location.hash = path.join('/');
           return;
         }
+
+        let category;
+        let page;
+        const statePage = this.model?.statePage.split('/');
+        if (statePage) {
+          if (statePage[0] === 'textbook' && statePage.length === 3) {
+            category = Number(statePage[1]) - 1;
+            page = Number(statePage[2]) - 1;
+          }
+        }
+
         this.model = new SprintModel();
         this.view = new SprintView(this.model.isAuthorized);
-        this.controller = new SprintController(this.model as SprintModel, this.view as SprintView);
+        this.controller = new SprintController(this.model as SprintModel, this.view as SprintView, category, page);
         break;
       }
       case 'game-audio': {
