@@ -4,16 +4,13 @@ import { MainPageView } from './views/MainPageView';
 import { SprintView } from './views/SprintView';
 import { SprintModel } from './models/SprintModel';
 import { SprintController } from './controllers/SprintController';
-import { BaseModel } from './models/BaseModel';
-import { BaseView } from './views/BaseView';
-import { BaseController } from './controllers/BaseController';
 import { TextBookController } from './controllers/TextBookController';
 import { TextBookModel } from './models/TextBookModel';
 import { TextBookView } from './views/TextBookView';
 
-type Model = BaseModel;
-type View = BaseView;
-type Controller = BaseController;
+type Model = MainPageModel | TextBookModel | SprintModel;
+type View = MainPageView | TextBookView | SprintView;
+type Controller = MainPageController | TextBookController | SprintController;
 
 export default class App {
   model!: Model;
@@ -27,35 +24,31 @@ export default class App {
     this.navigate();
   }
 
-  navigate = () => {
-    console.log(window.location.hash);
+  navigate = async () => {
     let path = window.location.hash.slice(1).split('/');
-    console.log(path);
 
     if (this.model?.statePage === path.join('/')) {
       return;
     }
 
-    if (path[0] === 'header') {
-      path = (this.model?.statePage ? this.model.statePage : 'mainPage').split('/');
-      window.location.hash = path.join('/');
-      return;
-    }
-
-    const isPopUp = path[0] === 'authorization-popup';
-    const isLogOut = path[0] === 'logout';
-
-    if (isPopUp || isLogOut) {
-      if (!this.view) {
-        path = (this.model?.statePage ? this.model.statePage : 'mainPage').split('/');
-        window.location.hash = path.join('/');
-      }
-      return;
-    }
-
-    console.log(path[0]);
-
     switch (path[0]) {
+      case 'logout': {
+        const statePage = this.model?.statePage ? this.model.statePage : 'mainPage';
+        this.model.statePage = 'logout';
+        window.location.hash = statePage;
+        return;
+      }
+      case 'authorization-popup': {
+        if (!this.view) {
+          path = (this.model?.statePage ? this.model.statePage : 'mainPage').split('/');
+          window.location.hash = path.join('/');
+        }
+        return;
+      }
+      case 'header': {
+        window.location.hash = this.model?.statePage ? this.model.statePage : 'mainPage';
+        return;
+      }
       case 'textbook': {
         let category = null;
         let page = null;
@@ -81,10 +74,10 @@ export default class App {
             path[2] = '1';
           } else if (+path[2] > 30) {
             path[2] = '30';
+          }
 
-            if (+path[1] === 7) {
-              path[2] = '1';
-            }
+          if (+path[1] === 7) {
+            path[2] = '1';
           }
 
           if (prevPath !== path.join('/')) {
@@ -92,12 +85,20 @@ export default class App {
             return;
           }
 
+          if (path.join('/') === 'textbook/7/1' && !this.model?.isAuthorized) {
+            window.location.hash = this.model?.statePage ? this.model.statePage : 'textbook';
+            return;
+          }
+
           category = Number(path[1]);
           page = Number(path[2]);
         }
 
-        this.model = new TextBookModel();
-        this.view = new TextBookView(this.model.isAuthorized, category, page);
+        this.model = new TextBookModel(category, page);
+        if (category && page) {
+          await (this.model as TextBookModel).getWordsForCategory(category as number, page as number);
+        }
+        this.view = new TextBookView((this.model as TextBookModel).words, this.model.isAuthorized, category, page);
         this.controller = new TextBookController(this.model as TextBookModel, this.view as TextBookView);
         break;
       }

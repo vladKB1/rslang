@@ -38,28 +38,6 @@ export class BaseView {
   user!: HTMLElement;
 
   constructor(isAuthorized: boolean) {
-    this.reRenderBasePage(isAuthorized);
-  }
-
-  createElement(tag: string, ...classNames: string[]): HTMLElement {
-    const element = document.createElement(tag);
-    if (classNames?.length) element.classList.add(...(classNames as string[]));
-    return element;
-  }
-
-  createImage(src: string, alt: string, ...classNames: string[]): HTMLImageElement {
-    const img = this.createElement('img', ...classNames) as HTMLImageElement;
-    img.src = src;
-    img.alt = alt;
-    return img;
-  }
-
-  getElement(selector: string): HTMLElement {
-    const element = document.querySelector(selector);
-    return element as HTMLElement;
-  }
-
-  reRenderBasePage(isAuthorized: boolean) {
     const link = document.createElement('link');
     link.rel = 'icon';
     link.href = favicon;
@@ -86,6 +64,24 @@ export class BaseView {
       this.user = this.getElement('.user');
       this.logOutButton = this.getElement('.logout');
     }
+  }
+
+  createElement(tag: string, ...classNames: string[]): HTMLElement {
+    const element = document.createElement(tag);
+    if (classNames?.length) element.classList.add(...(classNames as string[]));
+    return element;
+  }
+
+  createImage(src: string, alt: string, ...classNames: string[]): HTMLImageElement {
+    const img = this.createElement('img', ...classNames) as HTMLImageElement;
+    img.src = src;
+    img.alt = alt;
+    return img;
+  }
+
+  getElement(selector: string): HTMLElement {
+    const element = document.querySelector(selector);
+    return element as HTMLElement;
   }
 
   createLogo(className: string, href: string, title?: string): HTMLElement {

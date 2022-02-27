@@ -1,15 +1,20 @@
 import { User, signIn, makeRequest, createUser } from '../services/API';
 
+export type UserData = {
+  message?: string;
+  refreshToken?: string;
+  token?: string;
+  userId?: string;
+};
+
 export class BaseModel {
-  user!: object;
+  user!: UserData;
 
   statePage = window.location.hash.slice(1);
 
   isAuthorized = false;
 
   onAuthorizationErrorTextChanged!: (newErrorText: string) => void;
-
-  onReRenderPage!: (isAuthorized: boolean) => void;
 
   constructor() {
     this.user = JSON.parse(localStorage.getItem('userData')?.toString() || '{}');
@@ -18,7 +23,6 @@ export class BaseModel {
 
     if (hash !== 'authorization-popup' && hash !== 'logout') {
       this.statePage = hash ? hash : 'mainPage';
-      window.location.hash = this.statePage;
     }
   }
 
@@ -33,9 +37,7 @@ export class BaseModel {
 
       this.#commit('userData', content);
       this.user = content;
-      this.isAuthorized = Boolean(content.token.length);
-
-      this.onReRenderPage(this.isAuthorized);
+      this.isAuthorized = true;
     } catch (error) {
       const errorMessage = (error as Error).message;
       this.onAuthorizationErrorTextChanged(errorMessage);
@@ -58,15 +60,9 @@ export class BaseModel {
     localStorage.removeItem('userData');
     this.user = {};
     this.isAuthorized = false;
-
-    this.onReRenderPage(this.isAuthorized);
   }
 
   bindAuthorizationErrorTextChanged(callback: (newErrorText: string) => void) {
     this.onAuthorizationErrorTextChanged = callback;
-  }
-
-  bindReRenderPage(callback: (isAuthorized: boolean) => void) {
-    this.onReRenderPage = callback;
   }
 }

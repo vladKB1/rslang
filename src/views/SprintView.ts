@@ -1,6 +1,4 @@
-import { Word } from '../models/SprintModel';
-import { baseUrl } from '../services/API';
-
+import { baseUrl, Word } from '../services/API';
 import { BaseView } from './BaseView';
 
 export class SprintView extends BaseView {
