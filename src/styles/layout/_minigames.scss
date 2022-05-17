@@ -1,7 +1,7 @@
 .mini-games {
   background-color: $mini-games-section-background;
   padding-top: 70px;
-  padding-bottom: 30px;
+  padding-bottom: 50px;
 }
 
 .mini-games-container {
@@ -22,19 +22,19 @@
   }
 
   .games {
-    @include flex(space-around, center, column);
-    align-content: center;
-    width: 45%;
-    height: 100%;
+    @include flex(center);
+    flex-wrap: wrap;
+    gap: 50px;
+    width: 50%;
   }
 }
 
 .game-card {
+  position: relative;
   @include flex($direction: column);
-  width: 80%;
-  height: 25vh;
+  width: 250px;
+  height: 250px;
   padding: 10px;
-  margin-bottom: 30px;
   border-radius: 15px;
 
   &:last-child {
@@ -60,4 +60,12 @@
 .audio-call {
   background-color: $game-audio-call-card-background;
   padding-bottom: 0;
+}
+
+.savanna {
+  background-color: $game-savanna-card-background;
+}
+
+.repeating {
+  background-color: $game-repeating-card-background;
 }

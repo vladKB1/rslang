@@ -4,8 +4,9 @@ import backgroundImageSource from '../../public/assets/images/svg/description-ma
 import textBookImg from '../../public/assets/images/svg/description-text-book.svg';
 import sprintImg from '../../public/assets/images/svg/sprint.svg';
 import audioCallImg from '../../public/assets/images/svg/audiocall.svg';
+import savannaImg from '../../public/assets/images/svg/savanna.svg';
+import repeatingImg from '../../public/assets/images/svg/repeating.svg';
 import vladKB1 from '../../public/assets/images/svg/vladKB1-avatar.svg';
-import AntonKos from '../../public/assets/images/svg/AntonKos-avatar.svg';
 import Tsvetinskaya from '../../public/assets/images/svg/Tsvetinskaya-L-avatar.svg';
 
 export type TeamMate = {
@@ -13,6 +14,13 @@ export type TeamMate = {
   name: string;
   gitHub: string;
   about: string;
+};
+
+export type GameCard = {
+  name: string;
+  className: string;
+  image: HTMLImageElement;
+  isExist: boolean;
 };
 
 export class MainPageView extends BaseView {
@@ -63,8 +71,34 @@ export class MainPageView extends BaseView {
     return container;
   }
 
+  createGameCards(gameCardData: GameCard[]): HTMLElement[] {
+    const gameCardElements: HTMLElement[] = [];
+
+    gameCardData.forEach((gameCard) => {
+      const game = this.createElement('a', 'game-card', gameCard.className) as HTMLAnchorElement;
+      if (gameCard.isExist) {
+        game.href = `#game-${gameCard.className}`;
+      }
+      const title = this.createElement('h2', 'game-card-title');
+      title.textContent = gameCard.name;
+      game.append(title, gameCard.image);
+
+      if (!gameCard.isExist) {
+        const blackout = this.createElement('div', 'blackout');
+        const text = this.createElement('h2', 'game-card-title');
+        text.textContent = 'В разработке';
+        blackout.append(text);
+        game.append(blackout);
+      }
+
+      gameCardElements.push(game);
+    });
+
+    return gameCardElements;
+  }
+
   createSectionMiniGames(): HTMLElement {
-    const div = this.createElement('div', 'container', 'mini-games-container');
+    const miniGamesContainer = this.createElement('div', 'container', 'mini-games-container');
 
     const MiniGamesTitle = this.createElement('h1', 'title', 'mini-games-title');
     MiniGamesTitle.textContent = 'Мини-игры';
@@ -85,26 +119,37 @@ export class MainPageView extends BaseView {
     description.append(MiniGamesTitle, p1, p2, p3, p4);
 
     const games = this.createElement('div', 'games');
+    const gameCards = this.createGameCards([
+      {
+        name: 'спринт',
+        className: 'sprint',
+        image: this.createImage(sprintImg, 'sprintImg', 'game-card-img'),
+        isExist: true,
+      },
+      {
+        name: 'Аудиовызов',
+        className: 'audio-call',
+        image: this.createImage(audioCallImg, 'audioCallImg', 'game-card-img'),
+        isExist: false,
+      },
+      {
+        name: 'Саванна',
+        className: 'savanna',
+        image: this.createImage(savannaImg, 'savannaImg', 'game-card-img'),
+        isExist: false,
+      },
+      {
+        name: 'Повторение',
+        className: 'repeating',
+        image: this.createImage(repeatingImg, 'repeatingImg', 'game-card-img'),
+        isExist: false,
+      },
+    ]);
 
-    const sprintGame = this.createElement('a', 'game-card', 'sprint') as HTMLAnchorElement;
-    sprintGame.href = '#game-sprint';
-    let title = this.createElement('h2', 'game-card-title');
-    let image = this.createImage(sprintImg, 'sprintImg', 'game-card-img', 'sprint__img');
-    title.textContent = 'Спринт';
-    sprintGame.append(title, image);
+    gameCards.forEach((gameCard: HTMLElement) => games.append(gameCard));
+    miniGamesContainer.append(description, games);
 
-    const audioGame = this.createElement('a', 'game-card', 'audio-call') as HTMLAnchorElement;
-    audioGame.href = '#game-audio';
-    title = this.createElement('h2', 'game-card-title');
-    image = this.createImage(audioCallImg, 'audioCallImg', 'game-card-img', 'audio-call__img');
-    title.textContent = 'Аудиовызов';
-    audioGame.append(title, image);
-
-    games.append(sprintGame, audioGame);
-
-    div.append(description, games);
-
-    return div;
+    return miniGamesContainer;
   }
 
   createTeamMate(teamMate: TeamMate): HTMLElement {
@@ -151,14 +196,6 @@ export class MainPageView extends BaseView {
         name: 'Лидия',
         gitHub: 'https://github.com/Tsvetinskaya-L',
         about: 'Мини-игра "Спринт"',
-      }),
-    );
-    about.append(
-      this.createTeamMate({
-        photo: AntonKos,
-        name: 'Антон',
-        gitHub: 'https://github.com/AntonKos',
-        about: 'Мини-игра "Аудиовызов"',
       }),
     );
 

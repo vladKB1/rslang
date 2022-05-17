@@ -146,11 +146,6 @@ export class BaseView {
           id: 'mainPage/mini-games',
           nestedMenu: [
             {
-              itemName: 'Аудиовызов',
-              id: 'game-audio',
-              nestedMenu: null,
-            },
-            {
               itemName: 'Спринт',
               id: 'game-sprint',
               nestedMenu: null,
@@ -218,7 +213,7 @@ export class BaseView {
     copyright.append(span);
 
     const gitHub = this.createElement('div', 'github');
-    const team = ['vladKB1', 'Tsvetinskaya-L', 'AntonKos'];
+    const team = ['vladKB1', 'Tsvetinskaya-L'];
     gitHub.append(
       ...team.map((teammate) => {
         const a = this.createElement('a') as HTMLAnchorElement;
