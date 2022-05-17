@@ -1,4 +1,4 @@
-import { Word } from '../services/API';
+import { Word, baseUrl } from '../services/API';
 import { BaseView } from './BaseView';
 
 export class TextBookView extends BaseView {
@@ -8,12 +8,13 @@ export class TextBookView extends BaseView {
 
   constructor(words: Word[], isAuthorized: boolean, category: number | null, page: number | null) {
     super(isAuthorized);
+    this.footer.remove();
+
     if (!category || !page) {
       this.renderTextBook(isAuthorized);
     } else {
       this.renderTextBookCategory(words, isAuthorized, category as number, page as number);
       if (category !== 7) this.renderPagination(30, category, page);
-      this.renderTextBookButton();
     }
   }
 
@@ -52,15 +53,60 @@ export class TextBookView extends BaseView {
     this.main.append(container);
   }
 
+  createWordCard(word: Word): HTMLElement {
+    const wordCard = this.createElement('div', 'word-card');
+    wordCard.style.background = `linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("${baseUrl}/${word.image}") center/cover no-repeat`;
+
+    const wrapperTitle = this.createElement('div', 'word-card__wrapper-title');
+
+    const title = this.createElement('h2', 'word-card__title');
+    title.textContent = word.word;
+
+    const translationBlock = this.createElement('div', 'word-card__translation-block');
+    const translation = this.createElement('h3', 'word-card__translation');
+    translation.innerHTML = word.wordTranslate;
+    const transcription = this.createElement('h3', 'word-card__transcription');
+    transcription.innerHTML = word.transcription;
+    const playAudioButton = this.createElement('div', 'word-card__play-audio-button');
+    translationBlock.append(translation, transcription, playAudioButton);
+
+    wrapperTitle.append(title, translationBlock);
+
+    const wrapprerDescription = this.createElement('div', 'word-card__wrapper-description');
+
+    const meaningBlock = this.createElement('div', 'word-card__meaning-block');
+    const meaningEnglish = this.createElement('h4', 'word-card__meaning-text');
+    meaningEnglish.innerHTML = word.textMeaning;
+    const meaningRussian = this.createElement('h4', 'word-card__meaning-text');
+    meaningRussian.innerHTML = word.textMeaningTranslate;
+    meaningBlock.append(meaningEnglish, meaningRussian);
+
+    const line = this.createElement('div', 'line');
+
+    const exampleBlock = this.createElement('div', 'word-card__example-block');
+    const exampleEnglish = this.createElement('h4', 'word-card__example-text');
+    exampleEnglish.innerHTML = word.textExample;
+    const exampleRussian = this.createElement('h4', 'word-card__example-text');
+    exampleRussian.innerHTML = word.textExampleTranslate;
+    exampleBlock.append(exampleEnglish, exampleRussian);
+
+    wrapprerDescription.append(meaningBlock, line, exampleBlock);
+
+    wordCard.append(wrapperTitle, wrapprerDescription);
+    return wordCard;
+  }
+
   renderTextBookCategory(words: Word[], isAuthorized: boolean, category: number, page: number) {
     this.main.classList.add('textbook-page');
     const container = this.createElement('div', 'categoryPage');
+
+    console.log(words.length);
     words.forEach((word) => {
+      console.log(word);
       const p = this.createElement('p', 'word');
       p.textContent = word.word;
-      container.append(p);
+      container.append(this.createWordCard(word));
     });
-    console.log(isAuthorized, category, page);
 
     this.main.append(container);
   }
@@ -136,11 +182,5 @@ export class TextBookView extends BaseView {
     pagination.append(ArrowLeft, paginationList, ArrowRight);
     container.append(pagination);
     this.main.append(container);
-  }
-
-  renderTextBookButton() {
-    const returnToTextBook = this.createElement('a', 'retrun-to-textbook') as HTMLAnchorElement;
-    returnToTextBook.href = '#textbook';
-    this.main.append(returnToTextBook);
   }
 }

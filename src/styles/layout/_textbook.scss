@@ -1,17 +1,16 @@
 .textbook-page {
-  @include flex(center);
   position: relative;
+  @include flex(center);
+  min-height: 100vh;
+  padding: 120px 0;
   background-color: $textbook-main-background;
-  min-height: 92.5vh;
-  padding-top: 7vh;
 }
 
 .textbook-container {
   display: grid;
   grid-template-areas:
   "A B C" "D E F" "G G G";
-
-  gap: 3vh 3vh;
+  gap: 30px;
   justify-content: center;
   align-items: center;
   align-content: center;
@@ -19,8 +18,8 @@
 
   .category {
     @include flex(center);
-    width: 30vh;
-    height: 22vh;
+    width: 360px;
+    height: 260px;
 
     background-color: $text-book-category-background;
     box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%), 0 4px 12px 0 rgb(0 0 0 / 6%);
@@ -33,21 +32,21 @@
   }
 
   .category-title {
-    font-size: 6vh;
+    font-size: 72px;
   }
 
   .difficult-words-category {
     grid-area: G;
     @include flex(center, center, column);
-    width: 96vh;
-    height: 20vh;
+    width: 1140px;
+    height: 260px;
 
     background-color: $text-book-category-background;
     box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%), 0 4px 12px 0 rgb(0 0 0 / 6%);
     border-radius: 15px;
 
     .description {
-      font-size: 3vh;
+      font-size: 36px;
       text-align: center;
     }
   }
@@ -78,20 +77,61 @@
 }
 
 .categoryPage {
-  @include flex(center, $direction: column);
+  @include flex(center);
+  flex-wrap: wrap;
+  gap: 32px;
+
 }
 
-.retrun-to-textbook {
-  position: fixed;
-  top: calc(7vh + 30px);
-  left: 30px;
-  z-index: 1000;
+.word-card {
+  @include flex(center, flex-start, column);
+  gap: 20px;
+  width: 310px;
+  height: 310px;
+  padding: 10px;
 
-  width: 50px;
-  height: 50px;
-  padding: 15px;
-  border-radius: 50%;
-  background: url('../../public/assets/images/png/icon-textbook.png'), white;
-  background-size: cover;
+  border-radius: 15px;
   box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%), 0 4px 12px 0 rgb(0 0 0 / 6%);
+
+  color: white;
+
+  &__wrapper-title {
+    align-self: center;
+    @include flex(center, center, column);
+    gap: 10px;
+    max-width: 290px;
+  }
+
+  &__wrapper-description {
+    @include flex(flex-start, flex-start, column);
+    gap: 10px;
+    max-width: 290px;
+  }
+
+  .line {
+    align-self: center;
+    width: 300px;
+    height: 1px;
+    background-color: $textbook-main-background;
+    border-radius: 1px;
+  }
+
+  &__translation-block {
+    @include flex(center);
+    column-gap: 10px;
+  }
+
+  &__play-audio-button {
+    width: 35px;
+    height: 35px;
+    background:  url('../../public/assets/images/sprint/icons/soundOn.svg') center/cover no-repeat;
+  }
+
+
+  &__meaning-block,
+  &__example-block {
+    @include flex(flex-start, flex-start, column);
+    gap: 5px;
+    font-size: 12px;
+  }
 }
