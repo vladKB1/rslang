@@ -1,7 +1,6 @@
-import rsSchoolLogo from '../assets/images/svg/rs_school_js.svg';
-import signInImg from '../assets/images/svg/sign-in-image.svg';
-import userAvatar from '../assets/images/svg/user-avatar.svg';
-import favicon from '../favicon.ico';
+import rsSchoolLogo from '../../public/assets/images/svg/rs_school_js.svg';
+import signInImg from '../../public/assets/images/svg/sign-in-image.svg';
+import userAvatar from '../../public/assets/images/svg/user-avatar.svg';
 import { User } from '../services/API';
 
 export type MenuItem = {
@@ -38,11 +37,6 @@ export class BaseView {
   user!: HTMLElement;
 
   constructor(isAuthorized: boolean) {
-    const link = document.createElement('link');
-    link.rel = 'icon';
-    link.href = favicon;
-    document.head.append(link);
-
     this.body = this.getElement('body');
     this.body.innerHTML = '';
     this.body.append(this.renderBasePage(isAuthorized));
@@ -152,11 +146,6 @@ export class BaseView {
           id: 'mainPage/mini-games',
           nestedMenu: [
             {
-              itemName: 'Аудиовызов',
-              id: 'game-audio',
-              nestedMenu: null,
-            },
-            {
               itemName: 'Спринт',
               id: 'game-sprint',
               nestedMenu: null,
@@ -224,7 +213,7 @@ export class BaseView {
     copyright.append(span);
 
     const gitHub = this.createElement('div', 'github');
-    const team = ['vladKB1', 'Tsvetinskaya-L', 'AntonKos'];
+    const team = ['vladKB1', 'Tsvetinskaya-L'];
     gitHub.append(
       ...team.map((teammate) => {
         const a = this.createElement('a') as HTMLAnchorElement;

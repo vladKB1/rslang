@@ -10,12 +10,11 @@
 
   .github {
     @include flex(space-around);
+    width: 70%;
 
     a {
       color: white;
     }
-
-    width: 60%;
   }
 
   .rs-school-logo-img {

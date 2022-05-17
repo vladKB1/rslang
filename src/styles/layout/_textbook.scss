@@ -1,6 +1,6 @@
 .textbook-page {
-  @include flex(center); 
-  position: relative;  
+  @include flex(center);
+  position: relative;
   background-color: $textbook-main-background;
   min-height: 92.5vh;
   padding-top: 7vh;
@@ -78,7 +78,7 @@
 }
 
 .categoryPage {
-  @include flex(center, $direction: column);  
+  @include flex(center, $direction: column);
 }
 
 .retrun-to-textbook {
@@ -89,9 +89,9 @@
 
   width: 50px;
   height: 50px;
-  padding: 15px;  
+  padding: 15px;
   border-radius: 50%;
-  background: url('../assets/images/png/icon-textbook.png'), white;
+  background: url('../../public/assets/images/png/icon-textbook.png'), white;
   background-size: cover;
   box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%), 0 4px 12px 0 rgb(0 0 0 / 6%);
 }

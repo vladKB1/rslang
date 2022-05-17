@@ -141,7 +141,6 @@ export const makeRequest = async (requestObject: RequestObject, requestName: str
       }
     }
     case 'getDifficultWords': {
-      //TODO: need to add authorization ability if toke is expired
       if (status == STATUS.OK) {
         return content;
       } else {
