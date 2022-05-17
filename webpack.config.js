@@ -5,24 +5,37 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
-const devServer = (isDev) => !isDev ? {} : {
-  devServer: {
-    open: true,
-    port: 8080,
-  },
+const devServer = (isDev) => {
+  if (!isDev) return {};
+  return {
+    devServer: {
+      open: true,
+      hot: true,
+      port: 8080,
+      static: {
+        directory: path.join(__dirname, 'public'),
+      },
+    },
+  };
 };
 
-const esLintPlugin = (isDev) => isDev ? [new ESLintPlugin({ extensions: ['ts', 'js'] })] : [];
+const esLintPlugin = (isDev) => (isDev ? [new ESLintPlugin({ extensions: ['ts', 'js'] })] : []);
 
 module.exports = ({ development }) => ({
   mode: development ? 'development' : 'production',
   devtool: development ? 'inline-source-map' : false,
+
+  context: path.resolve(__dirname, 'src'),
   entry: {
-    main: './src/index.ts',
+    main: './index.ts',
   },
   output: {
-    filename: '[name].[contenthash].js',
+    filename: '[name].[fullhash].js',
     path: path.resolve(__dirname, 'dist'),
+    assetModuleFilename: (pathData) => {
+      const filepath = path.dirname(pathData.filename).split('/').slice(1).join('/');
+      return `${filepath}/[name][ext]`;
+    },
   },
   module: {
     rules: [
@@ -41,7 +54,7 @@ module.exports = ({ development }) => ({
       },
       {
         test: /\.html$/,
-        use: ['html-loader']
+        use: ['html-loader'],
       },
       {
         test: /\.css$/i,
@@ -49,38 +62,19 @@ module.exports = ({ development }) => ({
       },
       {
         test: /\.s[ac]ss$/i,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          'sass-loader',
-          {
-            loader: "sass-resources-loader",
-            options: {
-              resources: [
-                'src/styles/abstracts/_variables.scss',
-                'src/styles/abstracts/_mixins.scss',
-              ]
-            },
-          },
-        ]
-      }
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+      },
     ],
   },
   plugins: [
     ...esLintPlugin(development),
-    new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' }),
-    new HtmlWebpackPlugin({ template: './src/index.html' }),
+    new MiniCssExtractPlugin({ filename: '[name].[fullhash].css' }),
+    new HtmlWebpackPlugin({ template: './index.html' }),
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: path.resolve(__dirname, 'src/favicon.ico'),
+          from: path.resolve(__dirname, 'public'),
           to: path.resolve(__dirname, 'dist'),
-          noErrorOnMissing: true,
-        },
-        {
-          from: path.resolve(__dirname, 'src/assets/images'),
-          to: path.resolve(__dirname, 'dist'),
-          noErrorOnMissing: true,
         },
       ],
     }),
@@ -89,5 +83,5 @@ module.exports = ({ development }) => ({
   resolve: {
     extensions: ['.ts', '.js'],
   },
-  ...devServer(development)
+  ...devServer(development),
 });

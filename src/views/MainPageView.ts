@@ -1,12 +1,12 @@
 import { BaseView } from './BaseView';
 
-import backgroundImageSource from '../assets/images/svg/description-main.svg';
-import textBookImg from '../assets/images/svg/description-text-book.svg';
-import sprintImg from '../assets/images/svg/sprint.svg';
-import audioCallImg from '../assets/images/svg/audiocall.svg';
-import vladKB1 from '../assets/images/svg/vladKB1-avatar.svg';
-import AntonKos from '../assets/images/svg/AntonKos-avatar.svg';
-import Tsvetinskaya from '../assets/images/svg/Tsvetinskaya-L-avatar.svg';
+import backgroundImageSource from '../../public/assets/images/svg/description-main.svg';
+import textBookImg from '../../public/assets/images/svg/description-text-book.svg';
+import sprintImg from '../../public/assets/images/svg/sprint.svg';
+import audioCallImg from '../../public/assets/images/svg/audiocall.svg';
+import vladKB1 from '../../public/assets/images/svg/vladKB1-avatar.svg';
+import AntonKos from '../../public/assets/images/svg/AntonKos-avatar.svg';
+import Tsvetinskaya from '../../public/assets/images/svg/Tsvetinskaya-L-avatar.svg';
 
 export type TeamMate = {
   photo: string;
