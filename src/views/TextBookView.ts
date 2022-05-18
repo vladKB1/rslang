@@ -6,6 +6,8 @@ export class TextBookView extends BaseView {
 
   container!: HTMLElement;
 
+  currentAudio: HTMLAudioElement | null = null;
+
   constructor(words: Word[], isAuthorized: boolean, category: number | null, page: number | null) {
     super(isAuthorized);
     this.footer.remove();
@@ -55,7 +57,8 @@ export class TextBookView extends BaseView {
 
   createWordCard(word: Word): HTMLElement {
     const wordCard = this.createElement('div', 'word-card');
-    wordCard.style.background = `linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("${baseUrl}/${word.image}") center/cover no-repeat`;
+    wordCard.style.background = `linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7) ), url("${baseUrl}/${word.image}") center/cover no-repeat`;
+    wordCard.id = word.id;
 
     const wrapperTitle = this.createElement('div', 'word-card__wrapper-title');
 
@@ -72,7 +75,7 @@ export class TextBookView extends BaseView {
 
     wrapperTitle.append(title, translationBlock);
 
-    const wrapprerDescription = this.createElement('div', 'word-card__wrapper-description');
+    const wrapperDescription = this.createElement('div', 'word-card__wrapper-description');
 
     const meaningBlock = this.createElement('div', 'word-card__meaning-block');
     const meaningEnglish = this.createElement('h4', 'word-card__meaning-text');
@@ -90,25 +93,62 @@ export class TextBookView extends BaseView {
     exampleRussian.innerHTML = word.textExampleTranslate;
     exampleBlock.append(exampleEnglish, exampleRussian);
 
-    wrapprerDescription.append(meaningBlock, line, exampleBlock);
+    wrapperDescription.append(meaningBlock, line, exampleBlock);
 
-    wordCard.append(wrapperTitle, wrapprerDescription);
+    wordCard.append(wrapperTitle, wrapperDescription);
     return wordCard;
+  }
+
+  handlePlayAudio = (word: Word | undefined): void => {
+    if (!word) return;
+    if (this.currentAudio !== null) {
+      this.currentAudio.pause();
+    }
+
+    const audio = new Audio(`${baseUrl}/${word.audio}`);
+    const audioMeaning = new Audio(`${baseUrl}/${word.audioMeaning}`);
+    const audioExample = new Audio(`${baseUrl}/${word.audioExample}`);
+
+    audio.play();
+    this.currentAudio = audio;
+    audio.addEventListener('ended', () => {
+      audioMeaning.play();
+      this.currentAudio = audioMeaning;
+    });
+    audioMeaning.addEventListener('ended', () => {
+      audioExample.play();
+      this.currentAudio = audioExample;
+    });
+
+    audioExample.addEventListener('ended', () => {
+      this.currentAudio = null;
+    });
+  };
+
+  bindPlayAudio(handler: (wordId: Word | undefined) => void, words: Word[]) {
+    const categoryPage = this.getElement('.category-page');
+
+    categoryPage.addEventListener('click', async (event) => {
+      const target = event.target as HTMLElement;
+      if (target.classList.contains('word-card__play-audio-button')) {
+        const wordCard = target.closest('.word-card') as HTMLElement;
+        handler(words.find((word: Word) => word.id === wordCard.id));
+      }
+    });
   }
 
   renderTextBookCategory(words: Word[], isAuthorized: boolean, category: number, page: number) {
     this.main.classList.add('textbook-page');
-    const container = this.createElement('div', 'categoryPage');
+    const categoryPage = this.createElement('div', 'category-page');
+    this.main.append(categoryPage);
 
     console.log(words.length);
     words.forEach((word) => {
       console.log(word);
-      const p = this.createElement('p', 'word');
-      p.textContent = word.word;
-      container.append(this.createWordCard(word));
+      categoryPage.append(this.createWordCard(word));
     });
 
-    this.main.append(container);
+    this.bindPlayAudio(this.handlePlayAudio, words);
   }
 
   renderPagination(pages: number, currentCategory: number, currentPage: number) {

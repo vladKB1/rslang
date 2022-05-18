@@ -30,6 +30,10 @@ export default class App {
     if (this.model?.statePage === path.join('/')) {
       return;
     }
+    if (this.view instanceof TextBookView) {
+      this.view.currentAudio?.pause();
+      this.view.currentAudio = null;
+    }
 
     switch (path[0]) {
       case 'logout': {
