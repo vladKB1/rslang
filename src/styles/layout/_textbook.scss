@@ -80,16 +80,17 @@
 .category-page {
   @include flex(center);
   flex-wrap: wrap;
-  gap: 32px;
+  gap: 15px;
 
 }
 
 .word-card {
+  position: relative;
   @include flex(center, flex-start, column);
   gap: 10px;
-  width: 310px;
-  height: 310px;
-  padding: 10px;
+  width: 325px;
+  height: 325px;
+  padding: 30px 10px 10px;
 
   border-radius: 15px;
   box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%), 0 4px 12px 0 rgb(0 0 0 / 6%);
@@ -137,11 +138,53 @@
     }
   }
 
-
   &__meaning-block,
   &__example-block {
     @include flex(flex-start, flex-start, column);
     gap: 5px;
     font-size: 12px;
   }
+
+  &__statistics {
+    position: absolute;
+    top: 5px;
+    width: 90%;
+    @include flex(space-between);
+  }
+
+  &__statistics-buttons {
+    @include flex();
+    column-gap: 5px;
+  }
+
+  &__statistics-text {
+    @include flex(flex-start, flex-end, column);
+    font-size: 12px;
+  }
+}
+
+
+
+.difficult-button svg,
+.learned-button svg {
+  @include flex(center);
+  width: 30px;
+  height: auto;
+  fill: $word-card-not-active-button;
+}
+
+.word-card.difficult-active {
+  border: 2px solid $difficult-active;
+}
+
+.word-card.learned-active {
+  border: 2px solid $learned-active;
+}
+
+.difficult-button svg.active {
+  fill: $difficult-active;
+}
+
+.learned-button svg.active {
+  fill: $learned-active;
 }

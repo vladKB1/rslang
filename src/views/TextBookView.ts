@@ -1,6 +1,7 @@
 import { Word, baseUrl } from '../services/API';
 import { BaseView } from './BaseView';
-
+import { difficultButtonSvg } from '../../public/assets/images/svg/difficult';
+import { learnedButtonSvg } from '../../public/assets/images/svg/learned';
 export class TextBookView extends BaseView {
   textBook!: HTMLElement;
 
@@ -15,7 +16,7 @@ export class TextBookView extends BaseView {
     if (!category || !page) {
       this.renderTextBook(isAuthorized);
     } else {
-      this.renderTextBookCategory(words, isAuthorized, category as number, page as number);
+      this.renderTextBookCategory(words, isAuthorized);
       if (category !== 7) this.renderPagination(30, category, page);
     }
   }
@@ -55,7 +56,7 @@ export class TextBookView extends BaseView {
     this.main.append(container);
   }
 
-  createWordCard(word: Word): HTMLElement {
+  createWordCard(word: Word, isAuthorized: boolean): HTMLElement {
     const wordCard = this.createElement('div', 'word-card');
     wordCard.style.background = `linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7) ), url("${baseUrl}/${word.image}") center/cover no-repeat`;
     wordCard.id = word.id;
@@ -96,6 +97,28 @@ export class TextBookView extends BaseView {
     wrapperDescription.append(meaningBlock, line, exampleBlock);
 
     wordCard.append(wrapperTitle, wrapperDescription);
+
+    if (isAuthorized) {
+      const statistics = this.createElement('div', 'word-card__statistics');
+
+      const statisticsButtons = this.createElement('div', 'word-card__statistics-buttons');
+      const difficultButton = this.createElement('div', 'difficult-button');
+      difficultButton.innerHTML = difficultButtonSvg;
+      const learnedButton = this.createElement('div', 'learned-button');
+      learnedButton.innerHTML = learnedButtonSvg;
+      statisticsButtons.append(difficultButton, learnedButton);
+
+      const statisticsText = this.createElement('div', 'word-card__statistics-text');
+      const commonStatisctis = this.createElement('span', 'common-statistics');
+      commonStatisctis.innerHTML = `Статистика: 0/10`;
+      const progressStatistics = this.createElement('span', 'progress-statistics');
+      progressStatistics.innerHTML = 'Прогресс: 0/5';
+      statisticsText.append(commonStatisctis, progressStatistics);
+
+      statistics.append(statisticsButtons, statisticsText);
+      wordCard.prepend(statistics);
+    }
+
     return wordCard;
   }
 
@@ -137,7 +160,7 @@ export class TextBookView extends BaseView {
     });
   }
 
-  renderTextBookCategory(words: Word[], isAuthorized: boolean, category: number, page: number) {
+  renderTextBookCategory(words: Word[], isAuthorized: boolean) {
     this.main.classList.add('textbook-page');
     const categoryPage = this.createElement('div', 'category-page');
     this.main.append(categoryPage);
@@ -145,7 +168,7 @@ export class TextBookView extends BaseView {
     console.log(words.length);
     words.forEach((word) => {
       console.log(word);
-      categoryPage.append(this.createWordCard(word));
+      categoryPage.append(this.createWordCard(word, isAuthorized));
     });
 
     this.bindPlayAudio(this.handlePlayAudio, words);
