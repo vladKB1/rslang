@@ -1,4 +1,4 @@
-import { UserData, UserWordData } from '../models/BaseModel';
+import { UserWordData } from '../models/BaseModel';
 import { TextBookModel } from '../models/TextBookModel';
 import { TextBookView } from '../views/TextBookView';
 import { BaseController } from './BaseController';

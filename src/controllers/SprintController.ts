@@ -110,6 +110,10 @@ export class SprintController extends BaseController {
 
     document.removeEventListener('keyup', this.keyupHandler);
     this.addPlayWordHandler();
+
+    if (this.model.isAuthorized) {
+      this.model.updateStatistics(this.correctAnswers, this.incorrectAnswers);
+    }
   }
 
   bindLevelSelection() {
