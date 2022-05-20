@@ -75,11 +75,11 @@ export class TextBookModel extends BaseModel {
       return;
     }
 
-    let userWord: UserWord = {
+    const userWord: UserWord = {
       difficulty: status,
       optional: {
         counter: 0,
-        progressCounter: 0,
+        progressCounter: status === 'learned' ? 5 : 0,
         statisticsCounter: 0,
       },
     };
@@ -93,7 +93,8 @@ export class TextBookModel extends BaseModel {
         } else if (status === 'learned') {
           this.userWords[i].optional.progressCounter = 5;
         }
-        userWord = this.userWords[i];
+        userWord.difficulty = this.userWords[i].difficulty;
+        userWord.optional = this.userWords[i].optional;
         isExists = true;
         break;
       }

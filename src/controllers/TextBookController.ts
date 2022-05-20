@@ -1,3 +1,4 @@
+import { UserData, UserWordData } from '../models/BaseModel';
 import { TextBookModel } from '../models/TextBookModel';
 import { TextBookView } from '../views/TextBookView';
 import { BaseController } from './BaseController';
@@ -20,9 +21,25 @@ export class TextBookController extends BaseController {
     this.model.toggleWordCardButtons(wordId, status, isActive);
   };
 
-  handleAddWordStatus = () => {
+  handleAddWordStatus = (): UserWordData[] => {
     const map = new Map();
-    this.model.userWords.forEach((userWord) => map.set(userWord.wordId, userWord.difficulty));
-    return this.model.words.map((word) => (map.has(word.id) ? map.get(word.id) : 'normal'));
+    this.model.userWords.forEach((userWord) => map.set(userWord.wordId, userWord));
+
+    return this.model.words.map((word) => {
+      if (map.has(word.id)) {
+        return map.get(word.id);
+      } else {
+        return {
+          id: '',
+          difficulty: 'normal',
+          wordId: word.id,
+          optional: {
+            counter: 0,
+            progressCounter: 0,
+            statisticsCounter: 0,
+          },
+        };
+      }
+    });
   };
 }

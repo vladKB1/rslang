@@ -2,6 +2,7 @@ import { Word, baseUrl } from '../services/API';
 import { BaseView } from './BaseView';
 import { difficultButtonSvg } from '../../public/assets/images/svg/difficult';
 import { learnedButtonSvg } from '../../public/assets/images/svg/learned';
+import { UserWordData } from '../models/BaseModel';
 export class TextBookView extends BaseView {
   textBook!: HTMLElement;
 
@@ -111,11 +112,6 @@ export class TextBookView extends BaseView {
       statisticsButtons.append(difficultButton, learnedButton);
 
       const statisticsText = this.createElement('div', 'word-card__statistics-text');
-      const commonStatisctis = this.createElement('span', 'common-statistics');
-      commonStatisctis.innerHTML = `Статистика: 0/10`;
-      const progressStatistics = this.createElement('span', 'progress-statistics');
-      progressStatistics.innerHTML = 'Прогресс: 0/5';
-      statisticsText.append(commonStatisctis, progressStatistics);
 
       statistics.append(statisticsButtons, statisticsText);
       wordCard.prepend(statistics);
@@ -174,20 +170,31 @@ export class TextBookView extends BaseView {
     this.bindPlayAudio(this.handlePlayAudio, words);
   }
 
-  addWordStatus(wordStatuses: string[]) {
+  addWordStatus(wordsStatistics: UserWordData[]) {
     const wordCards = document.querySelectorAll('.word-card');
-    wordStatuses.forEach((wordStatus, index) => {
-      if (wordStatus === 'difficult') {
+    wordsStatistics.forEach((wordStatistics, index) => {
+      if (wordStatistics.difficulty === 'difficult') {
         const wordCard = wordCards[index];
 
         wordCard.classList.add('difficult-active');
         wordCard.querySelector('.difficult-button svg')?.classList.add('active');
-      } else if (wordStatus === 'learned') {
+      } else if (wordStatistics.difficulty === 'learned') {
         const wordCard = wordCards[index];
 
         wordCard.classList.add('learned-active');
         wordCard.querySelector('.learned-button svg')?.classList.add('active');
       }
+    });
+
+    wordsStatistics.forEach((wordStatistics, index) => {
+      const statisticsText = wordCards[index].querySelector('.word-card__statistics-text');
+
+      const commonStatisctis = this.createElement('span', 'common-statistics');
+      commonStatisctis.innerHTML = `Статистика: ${wordStatistics.optional.statisticsCounter}/${wordStatistics.optional.counter}`;
+      const progressStatistics = this.createElement('span', 'progress-statistics');
+      progressStatistics.innerHTML = `Прогресс: ${wordStatistics.optional.progressCounter}/5`;
+
+      statisticsText?.append(commonStatisctis, progressStatistics);
     });
   }
 
@@ -206,19 +213,19 @@ export class TextBookView extends BaseView {
       const target = event.target as HTMLElement;
       const word = target.closest('.word-card');
       const isDifficultActive = word?.classList.contains('difficult-active') as boolean;
-      const isLearnedtActive = word?.classList.contains('learned-active') as boolean;
+      const isLearnedActive = word?.classList.contains('learned-active') as boolean;
 
       if (target.closest('.difficult-button')) {
-        if (isLearnedtActive) {
+        if (isLearnedActive) {
           this.toggleLearnedElement(word?.querySelector('.learned-button svg') as HTMLElement);
         }
         handler(word?.id as string, 'difficult', isDifficultActive);
         this.toggleDifficultElement(target);
       } else if (target.closest('.learned-button')) {
         if (isDifficultActive) {
-          this.toggleLearnedElement(word?.querySelector('.difficult-button svg') as HTMLElement);
+          this.toggleDifficultElement(word?.querySelector('.difficult-button svg') as HTMLElement);
         }
-        handler(word?.id as string, 'learned', isLearnedtActive);
+        handler(word?.id as string, 'learned', isLearnedActive);
         this.toggleLearnedElement(target);
       }
     });
