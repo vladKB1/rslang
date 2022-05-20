@@ -1,20 +1,27 @@
-import { Word } from '../services/API';
+import { Word, baseUrl } from '../services/API';
 import { BaseView } from './BaseView';
-
+import { difficultButtonSvg } from '../../public/assets/images/svg/difficult';
+import { learnedButtonSvg } from '../../public/assets/images/svg/learned';
+import { UserWordData } from '../models/BaseModel';
 export class TextBookView extends BaseView {
   textBook!: HTMLElement;
 
-  container!: HTMLElement;
+  categoryPage!: HTMLElement;
+
+  currentAudio: HTMLAudioElement | null = null;
 
   constructor(words: Word[], isAuthorized: boolean, category: number | null, page: number | null) {
     super(isAuthorized);
+    this.footer.remove();
+
     if (!category || !page) {
       this.renderTextBook(isAuthorized);
     } else {
-      this.renderTextBookCategory(words, isAuthorized, category as number, page as number);
+      this.renderTextBookCategory(words, isAuthorized);
       if (category !== 7) this.renderPagination(30, category, page);
-      this.renderTextBookButton();
     }
+
+    this.categoryPage = this.getElement('.category-page');
   }
 
   renderTextBook(isAuthorized: boolean) {
@@ -52,18 +59,179 @@ export class TextBookView extends BaseView {
     this.main.append(container);
   }
 
-  renderTextBookCategory(words: Word[], isAuthorized: boolean, category: number, page: number) {
-    this.main.classList.add('textbook-page');
-    const container = this.createElement('div', 'categoryPage');
-    words.forEach((word) => {
-      const p = this.createElement('p', 'word');
-      p.textContent = word.word;
-      container.append(p);
-    });
-    console.log(isAuthorized, category, page);
+  createWordCard(word: Word, isAuthorized: boolean): HTMLElement {
+    const wordCard = this.createElement('div', 'word-card');
+    wordCard.style.background = `linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7) ), url("${baseUrl}/${word.image}") center/cover no-repeat`;
+    wordCard.id = word.id;
 
-    this.main.append(container);
+    const wrapperTitle = this.createElement('div', 'word-card__wrapper-title');
+
+    const title = this.createElement('h2', 'word-card__title');
+    title.textContent = word.word;
+
+    const translationBlock = this.createElement('div', 'word-card__translation-block');
+    const translation = this.createElement('h3', 'word-card__translation');
+    translation.innerHTML = word.wordTranslate;
+    const transcription = this.createElement('h3', 'word-card__transcription');
+    transcription.innerHTML = word.transcription;
+    const playAudioButton = this.createElement('div', 'word-card__play-audio-button');
+    translationBlock.append(translation, transcription, playAudioButton);
+
+    wrapperTitle.append(title, translationBlock);
+
+    const wrapperDescription = this.createElement('div', 'word-card__wrapper-description');
+
+    const meaningBlock = this.createElement('div', 'word-card__meaning-block');
+    const meaningEnglish = this.createElement('h4', 'word-card__meaning-text');
+    meaningEnglish.innerHTML = word.textMeaning;
+    const meaningRussian = this.createElement('h4', 'word-card__meaning-text');
+    meaningRussian.innerHTML = word.textMeaningTranslate;
+    meaningBlock.append(meaningEnglish, meaningRussian);
+
+    const line = this.createElement('div', 'line');
+
+    const exampleBlock = this.createElement('div', 'word-card__example-block');
+    const exampleEnglish = this.createElement('h4', 'word-card__example-text');
+    exampleEnglish.innerHTML = word.textExample;
+    const exampleRussian = this.createElement('h4', 'word-card__example-text');
+    exampleRussian.innerHTML = word.textExampleTranslate;
+    exampleBlock.append(exampleEnglish, exampleRussian);
+
+    wrapperDescription.append(meaningBlock, line, exampleBlock);
+
+    wordCard.append(wrapperTitle, wrapperDescription);
+
+    if (isAuthorized) {
+      const statistics = this.createElement('div', 'word-card__statistics');
+
+      const statisticsButtons = this.createElement('div', 'word-card__statistics-buttons');
+      const difficultButton = this.createElement('div', 'difficult-button');
+      difficultButton.innerHTML = difficultButtonSvg;
+      const learnedButton = this.createElement('div', 'learned-button');
+      learnedButton.innerHTML = learnedButtonSvg;
+      statisticsButtons.append(difficultButton, learnedButton);
+
+      const statisticsText = this.createElement('div', 'word-card__statistics-text');
+
+      statistics.append(statisticsButtons, statisticsText);
+      wordCard.prepend(statistics);
+    }
+
+    return wordCard;
   }
+
+  handlePlayAudio = (word: Word | undefined): void => {
+    if (!word) return;
+    if (this.currentAudio !== null) {
+      this.currentAudio.pause();
+    }
+
+    const audio = new Audio(`${baseUrl}/${word.audio}`);
+    const audioMeaning = new Audio(`${baseUrl}/${word.audioMeaning}`);
+    const audioExample = new Audio(`${baseUrl}/${word.audioExample}`);
+
+    audio.play();
+    this.currentAudio = audio;
+    audio.addEventListener('ended', () => {
+      audioMeaning.play();
+      this.currentAudio = audioMeaning;
+    });
+    audioMeaning.addEventListener('ended', () => {
+      audioExample.play();
+      this.currentAudio = audioExample;
+    });
+
+    audioExample.addEventListener('ended', () => {
+      this.currentAudio = null;
+    });
+  };
+
+  bindPlayAudio(handler: (wordId: Word | undefined) => void, words: Word[]) {
+    const categoryPage = this.getElement('.category-page');
+
+    categoryPage.addEventListener('click', async (event) => {
+      const target = event.target as HTMLElement;
+      if (target.classList.contains('word-card__play-audio-button')) {
+        const wordCard = target.closest('.word-card') as HTMLElement;
+        handler(words.find((word: Word) => word.id === wordCard.id));
+      }
+    });
+  }
+
+  renderTextBookCategory(words: Word[], isAuthorized: boolean) {
+    this.main.classList.add('textbook-page');
+    const categoryPage = this.createElement('div', 'category-page');
+    this.main.append(categoryPage);
+
+    words.forEach((word) => {
+      categoryPage.append(this.createWordCard(word, isAuthorized));
+    });
+
+    this.bindPlayAudio(this.handlePlayAudio, words);
+  }
+
+  addWordStatus(wordsStatistics: UserWordData[]) {
+    const wordCards = document.querySelectorAll('.word-card');
+    wordsStatistics.forEach((wordStatistics, index) => {
+      if (wordStatistics.difficulty === 'difficult') {
+        const wordCard = wordCards[index];
+
+        wordCard.classList.add('difficult-active');
+        wordCard.querySelector('.difficult-button svg')?.classList.add('active');
+      } else if (wordStatistics.difficulty === 'learned') {
+        const wordCard = wordCards[index];
+
+        wordCard.classList.add('learned-active');
+        wordCard.querySelector('.learned-button svg')?.classList.add('active');
+      }
+    });
+
+    wordsStatistics.forEach((wordStatistics, index) => {
+      const statisticsText = wordCards[index].querySelector('.word-card__statistics-text');
+
+      const commonStatisctis = this.createElement('span', 'common-statistics');
+      commonStatisctis.innerHTML = `Статистика: ${wordStatistics.optional.statisticsCounter}/${wordStatistics.optional.counter}`;
+      const progressStatistics = this.createElement('span', 'progress-statistics');
+      progressStatistics.innerHTML = `Прогресс: ${wordStatistics.optional.progressCounter}/5`;
+
+      statisticsText?.append(commonStatisctis, progressStatistics);
+    });
+  }
+
+  toggleDifficultElement = (target: HTMLElement) => {
+    target.closest('svg')?.classList.toggle('active');
+    target.closest('.word-card')?.classList.toggle('difficult-active');
+  };
+
+  toggleLearnedElement = (target: HTMLElement) => {
+    target.closest('svg')?.classList.toggle('active');
+    target.closest('.word-card')?.classList.toggle('learned-active');
+  };
+
+  bindToggleWordCardButton = (
+    handler: (wordId: string, status: string, isDifficultActive: boolean, isLearnedActive: boolean) => void,
+  ) => {
+    this.categoryPage?.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      const word = target.closest('.word-card');
+      const isDifficultActive = word?.classList.contains('difficult-active') as boolean;
+      const isLearnedActive = word?.classList.contains('learned-active') as boolean;
+
+      if (target.closest('.difficult-button')) {
+        if (isLearnedActive) {
+          this.toggleLearnedElement(word?.querySelector('.learned-button svg') as HTMLElement);
+        }
+        handler(word?.id as string, 'difficult', isDifficultActive, isLearnedActive);
+        this.toggleDifficultElement(target);
+      } else if (target.closest('.learned-button')) {
+        if (isDifficultActive) {
+          this.toggleDifficultElement(word?.querySelector('.difficult-button svg') as HTMLElement);
+        }
+        handler(word?.id as string, 'learned', isDifficultActive, isLearnedActive);
+        this.toggleLearnedElement(target);
+      }
+    });
+  };
 
   renderPagination(pages: number, currentCategory: number, currentPage: number) {
     //TODO: replace numbers to constants
@@ -136,11 +304,5 @@ export class TextBookView extends BaseView {
     pagination.append(ArrowLeft, paginationList, ArrowRight);
     container.append(pagination);
     this.main.append(container);
-  }
-
-  renderTextBookButton() {
-    const returnToTextBook = this.createElement('a', 'retrun-to-textbook') as HTMLAnchorElement;
-    returnToTextBook.href = '#textbook';
-    this.main.append(returnToTextBook);
   }
 }
