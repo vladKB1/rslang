@@ -196,16 +196,30 @@ export class TextBookView extends BaseView {
     target.closest('.word-card')?.classList.toggle('difficult-active');
   };
 
-  bindToggleDifficult(handler: (wordId: string, isActive: boolean) => void) {
+  toggleLearnedElement = (target: HTMLElement) => {
+    target.closest('svg')?.classList.toggle('active');
+    target.closest('.word-card')?.classList.toggle('learned-active');
+  };
+
+  bindToggleWordCardButton(handler: (wordId: string, status: string, isActive: boolean) => void) {
     this.categoryPage?.addEventListener('click', (event) => {
       const target = event.target as HTMLElement;
+      const word = target.closest('.word-card');
+      const isDifficultActive = word?.classList.contains('difficult-active') as boolean;
+      const isLearnedtActive = word?.classList.contains('learned-active') as boolean;
 
       if (target.closest('.difficult-button')) {
-        const word = target.closest('.word-card');
-        word?.classList.remove('learned-active');
-
-        handler(word?.id as string, word?.classList.contains('difficult-active') as boolean);
+        if (isLearnedtActive) {
+          this.toggleLearnedElement(word?.querySelector('.learned-button svg') as HTMLElement);
+        }
+        handler(word?.id as string, 'difficult', isDifficultActive);
         this.toggleDifficultElement(target);
+      } else if (target.closest('.learned-button')) {
+        if (isDifficultActive) {
+          this.toggleLearnedElement(word?.querySelector('.difficult-button svg') as HTMLElement);
+        }
+        handler(word?.id as string, 'learned', isLearnedtActive);
+        this.toggleLearnedElement(target);
       }
     });
   }

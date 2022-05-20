@@ -11,14 +11,13 @@ export class TextBookController extends BaseController {
     super(model, view);
 
     if (this.model.isAuthorized) {
-      this.view.bindToggleDifficult(this.handleToggleDifficult);
-
+      this.view.bindToggleWordCardButton(this.handleToggleWordCardButtons);
       this.view.addWordStatus(this.handleAddWordStatus());
     }
   }
 
-  handleToggleDifficult = (wordId: string, isActive: boolean) => {
-    this.model.toggleDifficult(wordId, isActive);
+  handleToggleWordCardButtons = (wordId: string, status: string, isActive: boolean) => {
+    this.model.toggleWordCardButtons(wordId, status, isActive);
   };
 
   handleAddWordStatus = () => {

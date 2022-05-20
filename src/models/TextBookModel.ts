@@ -59,7 +59,7 @@ export class TextBookModel extends BaseModel {
     }
   };
 
-  toggleDifficult = async (wordId: string, isActive: boolean) => {
+  toggleWordCardButtons = async (wordId: string, status: string, isActive: boolean) => {
     if (isActive) {
       await makeRequest(
         deleteUserWord(this.user.userId as string, this.user.token as string, wordId),
@@ -76,7 +76,7 @@ export class TextBookModel extends BaseModel {
     }
 
     let userWord: UserWord = {
-      difficulty: 'difficult',
+      difficulty: status,
       optional: {
         counter: 0,
         progressCounter: 0,
@@ -87,8 +87,12 @@ export class TextBookModel extends BaseModel {
     let isExists = false;
     for (let i = 0; i < this.userWords.length; i++) {
       if (this.userWords[i].wordId === wordId) {
-        this.userWords[i].difficulty = 'difficult';
-        this.userWords[i].optional.progressCounter = 0;
+        this.userWords[i].difficulty = status;
+        if (status === 'difficult') {
+          this.userWords[i].optional.progressCounter = 0;
+        } else if (status === 'learned') {
+          this.userWords[i].optional.progressCounter = 5;
+        }
         userWord = this.userWords[i];
         isExists = true;
         break;
