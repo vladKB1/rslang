@@ -1,4 +1,13 @@
-import { getWord, getWords, makeRequest, Word } from '../services/API';
+import {
+  createUserWord,
+  deleteUserWord,
+  getWord,
+  getWords,
+  makeRequest,
+  updateUserWord,
+  UserWord,
+  Word,
+} from '../services/API';
 import { BaseModel } from './BaseModel';
 
 export class TextBookModel extends BaseModel {
@@ -21,7 +30,9 @@ export class TextBookModel extends BaseModel {
 
       if (this.category === 7) {
         for (const userWord of this.userWords) {
-          await content.push(await makeRequest(getWord(userWord.wordId), 'getWord'));
+          if (userWord.difficulty === 'difficult') {
+            await content.push(await makeRequest(getWord(userWord.wordId), 'getWord'));
+          }
         }
       } else {
         content = await makeRequest(
@@ -46,5 +57,60 @@ export class TextBookModel extends BaseModel {
       console.log('getWordForCategory ERROR: ', errorMessage);
       return;
     }
+  };
+
+  toggleDifficult = async (wordId: string, isActive: boolean) => {
+    if (isActive) {
+      await makeRequest(
+        deleteUserWord(this.user.userId as string, this.user.token as string, wordId),
+        'deleteUserWord',
+      );
+
+      this.userWords.splice(
+        this.userWords.findIndex((userWord) => userWord.wordId === wordId),
+        1,
+      );
+
+      this.commit('userWords', this.userWords);
+      return;
+    }
+
+    let userWord: UserWord = {
+      difficulty: 'difficult',
+      optional: {
+        counter: 0,
+        progressCounter: 0,
+        statisticsCounter: 0,
+      },
+    };
+
+    let isExists = false;
+    for (let i = 0; i < this.userWords.length; i++) {
+      if (this.userWords[i].wordId === wordId) {
+        this.userWords[i].difficulty = 'difficult';
+        this.userWords[i].optional.progressCounter = 0;
+        userWord = this.userWords[i];
+        isExists = true;
+        break;
+      }
+    }
+
+    if (!isExists) {
+      this.userWords.push(
+        await makeRequest(
+          createUserWord(this.user.userId as string, this.user.token as string, wordId, userWord),
+          'createUserWord',
+        ),
+      );
+    } else {
+      this.userWords.push(
+        await makeRequest(
+          updateUserWord(this.user.userId as string, this.user.token as string, wordId, userWord),
+          'updateUserWord',
+        ),
+      );
+    }
+
+    this.commit('userWords', this.userWords);
   };
 }

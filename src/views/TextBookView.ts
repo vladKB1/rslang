@@ -5,7 +5,7 @@ import { learnedButtonSvg } from '../../public/assets/images/svg/learned';
 export class TextBookView extends BaseView {
   textBook!: HTMLElement;
 
-  container!: HTMLElement;
+  categoryPage!: HTMLElement;
 
   currentAudio: HTMLAudioElement | null = null;
 
@@ -19,6 +19,8 @@ export class TextBookView extends BaseView {
       this.renderTextBookCategory(words, isAuthorized);
       if (category !== 7) this.renderPagination(30, category, page);
     }
+
+    this.categoryPage = this.getElement('.category-page');
   }
 
   renderTextBook(isAuthorized: boolean) {
@@ -170,6 +172,42 @@ export class TextBookView extends BaseView {
     });
 
     this.bindPlayAudio(this.handlePlayAudio, words);
+  }
+
+  addWordStatus(wordStatuses: string[]) {
+    const wordCards = document.querySelectorAll('.word-card');
+    wordStatuses.forEach((wordStatus, index) => {
+      if (wordStatus === 'difficult') {
+        const wordCard = wordCards[index];
+
+        wordCard.classList.add('difficult-active');
+        wordCard.querySelector('.difficult-button svg')?.classList.add('active');
+      } else if (wordStatus === 'learned') {
+        const wordCard = wordCards[index];
+
+        wordCard.classList.add('learned-active');
+        wordCard.querySelector('.learned-button svg')?.classList.add('active');
+      }
+    });
+  }
+
+  toggleDifficultElement = (target: HTMLElement) => {
+    target.closest('svg')?.classList.toggle('active');
+    target.closest('.word-card')?.classList.toggle('difficult-active');
+  };
+
+  bindToggleDifficult(handler: (wordId: string, isActive: boolean) => void) {
+    this.categoryPage?.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+
+      if (target.closest('.difficult-button')) {
+        const word = target.closest('.word-card');
+        word?.classList.remove('learned-active');
+
+        handler(word?.id as string, word?.classList.contains('difficult-active') as boolean);
+        this.toggleDifficultElement(target);
+      }
+    });
   }
 
   renderPagination(pages: number, currentCategory: number, currentPage: number) {

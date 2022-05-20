@@ -1,5 +1,6 @@
 export enum STATUS {
   OK = 200,
+  OK_NO_CONTENT = 204,
   BAD_REQUEST = 400,
   UNAUTHORIZED = 401,
   FORBIDDEN = 403,
@@ -111,9 +112,33 @@ export const getUserWords = (userId: string, token: string) => {
   } as RequestObject;
 };
 
+export const getUserWord = (userId: string, token: string, wordId: string) => {
+  return {
+    url: `${baseUrl}${path.users}/${userId}${path.words}/${wordId}`,
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  } as RequestObject;
+};
+
+export const deleteUserWord = (userId: string, token: string, wordId: string) => {
+  return {
+    url: `${baseUrl}${path.users}/${userId}${path.words}/${wordId}`,
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  } as RequestObject;
+};
+
 export const createUserWord = (userId: string, token: string, wordId: string, userWord: UserWord) => {
   return {
-    url: `${baseUrl}${path.users}${userId}${path.words}/${wordId}`,
+    url: `${baseUrl}${path.users}/${userId}${path.words}/${wordId}`,
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -126,7 +151,7 @@ export const createUserWord = (userId: string, token: string, wordId: string, us
 
 export const updateUserWord = (userId: string, token: string, wordId: string, userWord: UserWord) => {
   return {
-    url: `${baseUrl}${path.users}${userId}${path.words}/${wordId}`,
+    url: `${baseUrl}${path.users}/${userId}${path.words}/${wordId}`,
     method: 'PUT',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -149,7 +174,7 @@ export const makeRequest = async (requestObject: RequestObject, requestName: str
     console.log('Возникла проблема с fetch запросом: ', (error as Error).message);
   }
 
-  const content = rawResponse?.ok ? await rawResponse.json() : null;
+  const content = rawResponse?.statusText !== 'No Content' ? (rawResponse?.ok ? await rawResponse.json() : null) : null;
   const status = rawResponse?.status;
 
   switch (requestName) {
@@ -189,6 +214,28 @@ export const makeRequest = async (requestObject: RequestObject, requestName: str
     case 'getUserWords': {
       switch (status) {
         case STATUS.OK:
+          return content;
+        case STATUS.UNAUTHORIZED:
+          throw new Error('UNAUTHORIZED: Access token is missing or invalid');
+        default:
+          throw new Error('Возникла ошибка при обращении к серверу.');
+      }
+    }
+    case 'getUserWord': {
+      switch (status) {
+        case STATUS.OK:
+          return content;
+        case STATUS.UNAUTHORIZED:
+          throw new Error('UNAUTHORIZED: Access token is missing or invalid');
+        case STATUS.NOT_FOUND:
+          return undefined;
+        default:
+          throw new Error('Возникла ошибка при обращении к серверу.');
+      }
+    }
+    case 'deleteUserWord': {
+      switch (status) {
+        case STATUS.OK_NO_CONTENT:
           return content;
         case STATUS.UNAUTHORIZED:
           throw new Error('UNAUTHORIZED: Access token is missing or invalid');

@@ -41,7 +41,7 @@ export class BaseModel {
     }
   }
 
-  #commit(dataName: string, data: object) {
+  commit(dataName: string, data: object) {
     localStorage.setItem(dataName, JSON.stringify(data));
   }
 
@@ -50,7 +50,7 @@ export class BaseModel {
       const content = await makeRequest(signIn(user), 'signIn');
       this.onAuthorizationErrorTextChanged('');
 
-      this.#commit('userData', content);
+      this.commit('userData', content);
       this.user = content;
       this.isAuthorized = true;
     } catch (error) {
@@ -89,7 +89,7 @@ export class BaseModel {
       if (!this.user?.userId || !this.user?.token) return;
 
       const userWords = await makeRequest(getUserWords(this.user.userId, this.user.token), 'getUserWords');
-      this.#commit('userWords', userWords);
+      this.commit('userWords', userWords);
       this.userWords = userWords;
     } catch (error) {
       const errorMessage = (error as Error).message;
