@@ -44,6 +44,8 @@ export class BaseController {
   handleSignInUser = async (user: User) => {
     try {
       await this.model.signInUser(user);
+      await this.model.getUserWords();
+
       const statePage = this.model.statePage;
       this.model.statePage = window.location.hash;
       window.location.hash = statePage;

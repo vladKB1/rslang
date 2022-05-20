@@ -20,6 +20,15 @@ export type User = {
   password: string;
 };
 
+export type UserWord = {
+  difficulty: string;
+  optional: {
+    counter: number;
+    progressCounter: number;
+    statisticsCounter: number;
+  };
+};
+
 export type Query = {
   key: string;
   value: string;
@@ -86,15 +95,45 @@ export const getWords = (queryParams: Query[]) => {
   return { url: `${baseUrl}${path.words}${generateQueryString(queryParams)}`, method: 'GET' } as RequestObject;
 };
 
-export const getDifficultWords = (userId: string, token: string) => {
+export const getWord = (wordId: string) => {
+  return { url: `${baseUrl}${path.words}/${wordId}`, method: 'GET' } as RequestObject;
+};
+
+export const getUserWords = (userId: string, token: string) => {
   return {
-    url: `${baseUrl}${path.users}${userId}${path.words}`,
+    url: `${baseUrl}${path.users}/${userId}${path.words}`,
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
+  } as RequestObject;
+};
+
+export const createUserWord = (userId: string, token: string, wordId: string, userWord: UserWord) => {
+  return {
+    url: `${baseUrl}${path.users}${userId}${path.words}/${wordId}`,
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(userWord),
+  } as RequestObject;
+};
+
+export const updateUserWord = (userId: string, token: string, wordId: string, userWord: UserWord) => {
+  return {
+    url: `${baseUrl}${path.users}${userId}${path.words}/${wordId}`,
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(userWord),
   } as RequestObject;
 };
 
@@ -134,17 +173,47 @@ export const makeRequest = async (requestObject: RequestObject, requestName: str
       }
     }
     case 'getWords': {
-      if (status == STATUS.OK) {
+      if (status === STATUS.OK) {
         return content;
       } else {
         throw new Error('Возникла ошибка при обращении к серверу.');
       }
     }
-    case 'getDifficultWords': {
-      if (status == STATUS.OK) {
+    case 'getWord': {
+      if (status === STATUS.OK) {
         return content;
       } else {
         throw new Error('Возникла ошибка при обращении к серверу.');
+      }
+    }
+    case 'getUserWords': {
+      switch (status) {
+        case STATUS.OK:
+          return content;
+        case STATUS.UNAUTHORIZED:
+          throw new Error('UNAUTHORIZED: Access token is missing or invalid');
+        default:
+          throw new Error('Возникла ошибка при обращении к серверу.');
+      }
+    }
+    case 'createUserWord': {
+      switch (status) {
+        case STATUS.OK:
+          return content;
+        case STATUS.UNAUTHORIZED:
+          throw new Error('UNAUTHORIZED: Access token is missing or invalid');
+        default:
+          throw new Error('Возникла ошибка при обращении к серверу.');
+      }
+    }
+    case 'updateUserWord': {
+      switch (status) {
+        case STATUS.OK:
+          return content;
+        case STATUS.UNAUTHORIZED:
+          throw new Error('UNAUTHORIZED: Access token is missing or invalid');
+        default:
+          throw new Error('Возникла ошибка при обращении к серверу.');
       }
     }
   }

@@ -1,4 +1,4 @@
-import { getDifficultWords, getWords, makeRequest, Word } from '../services/API';
+import { getWord, getWords, makeRequest, Word } from '../services/API';
 import { BaseModel } from './BaseModel';
 
 export class TextBookModel extends BaseModel {
@@ -17,13 +17,12 @@ export class TextBookModel extends BaseModel {
 
   getWordsForCategory = async (category: number, page: number) => {
     try {
-      let content;
+      let content = [] as Word[];
 
       if (this.category === 7) {
-        content = await makeRequest(
-          getDifficultWords(this.user.userId as string, this.user.token as string),
-          'getDifficultWords',
-        );
+        for (const userWord of this.userWords) {
+          await content.push(await makeRequest(getWord(userWord.wordId), 'getWord'));
+        }
       } else {
         content = await makeRequest(
           getWords([
@@ -33,9 +32,17 @@ export class TextBookModel extends BaseModel {
           'getWords',
         );
       }
+
       this.words = content as Word[];
     } catch (error) {
       const errorMessage = (error as Error).message;
+      console.log('getWordForCategory ERROR: ', errorMessage);
+
+      if (errorMessage.startsWith('UNAUTHORIZED:')) {
+        this.reSignIn();
+        return;
+      }
+
       console.log('getWordForCategory ERROR: ', errorMessage);
       return;
     }

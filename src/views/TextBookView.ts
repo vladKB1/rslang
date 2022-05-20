@@ -165,9 +165,7 @@ export class TextBookView extends BaseView {
     const categoryPage = this.createElement('div', 'category-page');
     this.main.append(categoryPage);
 
-    console.log(words.length);
     words.forEach((word) => {
-      console.log(word);
       categoryPage.append(this.createWordCard(word, isAuthorized));
     });
 

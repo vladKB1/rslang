@@ -37,7 +37,9 @@ export default class App {
 
     switch (path[0]) {
       case 'logout': {
-        const statePage = this.model?.statePage ? this.model.statePage : 'mainPage';
+        let statePage = this.model?.statePage ? this.model.statePage : 'mainPage';
+        if (statePage === 'textbook/7/1') statePage = 'textbook';
+
         this.model.statePage = 'logout';
         window.location.hash = statePage;
         return;
@@ -98,7 +100,7 @@ export default class App {
           page = Number(path[2]);
         }
 
-        this.model = new TextBookModel(category, page);
+        this.model = await new TextBookModel(category, page);
         if (category && page) {
           await (this.model as TextBookModel).getWordsForCategory(category as number, page as number);
         }
