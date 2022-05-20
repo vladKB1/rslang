@@ -59,8 +59,16 @@ export class TextBookModel extends BaseModel {
     }
   };
 
-  toggleWordCardButtons = async (wordId: string, status: string, isActive: boolean) => {
-    if (isActive) {
+  toggleWordCardButtons = async (
+    wordId: string,
+    status: string,
+    isDifficultActive: boolean,
+    isLearnedActive: boolean,
+  ) => {
+    if (
+      (status === 'learned' && isLearnedActive && !isDifficultActive) ||
+      (status === 'difficult' && !isLearnedActive && isDifficultActive)
+    ) {
       await makeRequest(
         deleteUserWord(this.user.userId as string, this.user.token as string, wordId),
         'deleteUserWord',
@@ -108,11 +116,9 @@ export class TextBookModel extends BaseModel {
         ),
       );
     } else {
-      this.userWords.push(
-        await makeRequest(
-          updateUserWord(this.user.userId as string, this.user.token as string, wordId, userWord),
-          'updateUserWord',
-        ),
+      await makeRequest(
+        updateUserWord(this.user.userId as string, this.user.token as string, wordId, userWord),
+        'updateUserWord',
       );
     }
 

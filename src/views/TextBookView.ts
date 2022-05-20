@@ -208,7 +208,9 @@ export class TextBookView extends BaseView {
     target.closest('.word-card')?.classList.toggle('learned-active');
   };
 
-  bindToggleWordCardButton(handler: (wordId: string, status: string, isActive: boolean) => void) {
+  bindToggleWordCardButton = (
+    handler: (wordId: string, status: string, isDifficultActive: boolean, isLearnedActive: boolean) => void,
+  ) => {
     this.categoryPage?.addEventListener('click', (event) => {
       const target = event.target as HTMLElement;
       const word = target.closest('.word-card');
@@ -219,17 +221,17 @@ export class TextBookView extends BaseView {
         if (isLearnedActive) {
           this.toggleLearnedElement(word?.querySelector('.learned-button svg') as HTMLElement);
         }
-        handler(word?.id as string, 'difficult', isDifficultActive);
+        handler(word?.id as string, 'difficult', isDifficultActive, isLearnedActive);
         this.toggleDifficultElement(target);
       } else if (target.closest('.learned-button')) {
         if (isDifficultActive) {
           this.toggleDifficultElement(word?.querySelector('.difficult-button svg') as HTMLElement);
         }
-        handler(word?.id as string, 'learned', isLearnedActive);
+        handler(word?.id as string, 'learned', isDifficultActive, isLearnedActive);
         this.toggleLearnedElement(target);
       }
     });
-  }
+  };
 
   renderPagination(pages: number, currentCategory: number, currentPage: number) {
     //TODO: replace numbers to constants

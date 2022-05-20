@@ -17,8 +17,13 @@ export class TextBookController extends BaseController {
     }
   }
 
-  handleToggleWordCardButtons = (wordId: string, status: string, isActive: boolean) => {
-    this.model.toggleWordCardButtons(wordId, status, isActive);
+  handleToggleWordCardButtons = (
+    wordId: string,
+    status: string,
+    isDifficultActive: boolean,
+    isLearnedActive: boolean,
+  ) => {
+    this.model.toggleWordCardButtons(wordId, status, isDifficultActive, isLearnedActive);
   };
 
   handleAddWordStatus = (): UserWordData[] => {
