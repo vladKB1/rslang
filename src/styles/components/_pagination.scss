@@ -1,0 +1,66 @@
+.pagination-container {
+  position: fixed;
+  bottom: 30px;
+}
+
+.pagination {
+  @include flex(space-between);
+  column-gap: 20px;
+  padding: 10px 30px;
+
+  background: $textbook-pagination-background;
+  border-radius: 50px;
+  box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%), 0 4px 12px 0 rgb(0 0 0 / 6%);
+
+  &__arrow {
+    @include flex(center, center);
+    width: 42px;
+    height: 42px;
+    padding: 21px;
+
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  &__list {
+    @include flex(space-around);
+    column-gap: 20px;
+
+    &-dots {
+      @include flex(center, center);
+      width: 42px;
+      height: 42px;
+      padding: 21px;
+
+      border-radius: 50%;
+
+      &hover {
+        background: none;
+      }
+    }
+
+    &-item {
+      @include flex(center, center);
+      width: 42px;
+      height: 42px;
+      padding: 21px;
+
+      border-radius: 50%;
+      cursor: pointer;
+
+      &:hover {
+        background: $not-active-pagination-item;
+      }
+    }
+
+    .active-page {
+      color: white;
+      background: $active-pagination-item;
+    }
+  }
+}
+
+.not-active-arrow {
+  color: $not-active-pagination-item;
+
+}

@@ -1,0 +1,19 @@
+.button {
+  padding: 5px 15px;
+
+  font-weight: 600;
+  background-color: $not-active-button;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+
+  &:hover,
+  &:active {
+    background-color: $active-button;
+  }
+
+  &:visited {
+    color: white;
+  }
+}

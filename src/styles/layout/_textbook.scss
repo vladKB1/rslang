@@ -1,0 +1,191 @@
+.textbook-page {
+  position: relative;
+  @include flex(center);
+  min-height: 100vh;
+  padding: 120px 0;
+  background-color: $textbook-main-background;
+}
+
+.textbook-container {
+  display: grid;
+  grid-template-areas:
+  "A B C" "D E F" "G G G";
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+
+
+  .category {
+    @include flex(center);
+    width: 360px;
+    height: 260px;
+
+    background-color: $text-book-category-background;
+    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%), 0 4px 12px 0 rgb(0 0 0 / 6%);
+    border-radius: 15px;
+  }
+
+  .disabled {
+    cursor: not-allowed;
+    backdrop-filter: blur(5px);
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+  }
+
+  .category-title {
+    font-size: 72px;
+  }
+
+  .difficult-words-category {
+    grid-area: G;
+    @include flex(center, center, column);
+    width: 1140px;
+    height: 260px;
+
+    background-color: $text-book-category-background;
+    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%), 0 4px 12px 0 rgb(0 0 0 / 6%);
+    border-radius: 15px;
+
+    .description {
+      font-size: 36px;
+      text-align: center;
+    }
+  }
+
+  .A1 {
+    grid-area: A;
+  }
+
+  .B1 {
+    grid-area: B;
+  }
+
+  .C1 {
+    grid-area: C;
+  }
+
+  .A2 {
+    grid-area: D;
+  }
+
+  .B2 {
+    grid-area: E;
+  }
+
+  .C2 {
+    grid-area: F;
+  }
+}
+
+.category-page {
+  @include flex(center);
+  flex-wrap: wrap;
+  gap: 15px;
+
+}
+
+.word-card {
+  position: relative;
+  @include flex(center, flex-start, column);
+  gap: 10px;
+  width: 325px;
+  height: 325px;
+  padding: 30px 10px 10px;
+
+  border-radius: 15px;
+  box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%), 0 4px 12px 0 rgb(0 0 0 / 6%);
+
+  color: white;
+
+  &__wrapper-title {
+    align-self: center;
+    @include flex(center, center, column);
+    max-width: 290px;
+  }
+
+  &__wrapper-description {
+    @include flex(flex-start, flex-start, column);
+    gap: 5px;
+    max-width: 290px;
+  }
+
+  .line {
+    align-self: center;
+    width: 300px;
+    height: 1px;
+    background-color: $textbook-main-background;
+    border-radius: 1px;
+  }
+
+  &__translation-block {
+    @include flex(center);
+    flex-wrap: wrap;
+    column-gap: 10px;
+    max-width: 290px;
+    font-size: 18px;
+  }
+
+  &__play-audio-button {
+    width: 35px;
+    height: 35px;
+    background:  url('../../public/assets/images/sprint/icons/soundOn.svg') center/cover no-repeat;
+    cursor: pointer;
+    transition: all 0.1s ease-in;
+
+    &:active {
+      transform: scale(0.8);
+      transition: all 0.1s ease-in;
+    }
+  }
+
+  &__meaning-block,
+  &__example-block {
+    @include flex(flex-start, flex-start, column);
+    gap: 5px;
+    font-size: 12px;
+  }
+
+  &__statistics {
+    position: absolute;
+    top: 5px;
+    width: 90%;
+    @include flex(space-between);
+  }
+
+  &__statistics-buttons {
+    @include flex();
+    column-gap: 5px;
+  }
+
+  &__statistics-text {
+    @include flex(flex-start, flex-end, column);
+    font-size: 12px;
+  }
+}
+
+
+
+.difficult-button svg,
+.learned-button svg {
+  @include flex(center);
+  width: 30px;
+  height: auto;
+  fill: $word-card-not-active-button;
+  cursor: pointer;
+}
+
+.word-card.difficult-active {
+  border: 2px solid $difficult-active;
+}
+
+.word-card.learned-active {
+  border: 2px solid $learned-active;
+}
+
+.difficult-button svg.active {
+  fill: $difficult-active;
+}
+
+.learned-button svg.active {
+  fill: $learned-active;
+}

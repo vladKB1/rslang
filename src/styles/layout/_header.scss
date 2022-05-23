@@ -1,0 +1,75 @@
+.header {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 10;
+
+  background-color: $header-background;
+  box-shadow: 0 0 10px 0 rgba(0,0,0,0.75);
+}
+
+.header-container {
+  @include flex();
+
+  padding: 12px 30px;
+
+  .main-logo {
+    @include flex();
+    flex-shrink: 1;
+    font-weight: 700;
+    color: black;
+
+    &:hover {
+      color: $active-nav;
+    }
+  }
+
+  .header-nav-container {
+    flex-grow: 1;
+    padding: 0 20px;
+  }
+
+  .user {
+    position: relative;
+    max-width: 40px;
+    padding: 6px 5px 0;
+
+    .user__avatar {
+      background-color: $not-active-nav;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .user__settings {
+      @include flex(space-between);
+      margin: 5px;
+      padding: 5px 15px;
+
+      border-radius: 15px;
+      cursor: pointer;
+
+      &::after {
+        position: absolute;
+        top: 2px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        border-bottom: $not-active-nav solid 3px;
+      }
+
+      &:hover {
+        background-color: #eef5fd;
+      }
+
+      .user__avatar {
+        max-width: 35%;
+      }
+
+      .user__rank {
+        color: $text-color;
+        cursor: pointer;
+      }
+    }
+  }
+}
