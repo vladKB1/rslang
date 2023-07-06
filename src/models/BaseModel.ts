@@ -31,8 +31,8 @@ export class BaseModel {
 
   constructor() {
     this.user = JSON.parse(localStorage.getItem('userData')?.toString() || '{}');
-    this.userWords = JSON.parse(localStorage.getItem('userWords')?.toString() || '[]');
     this.isAuthorized = Boolean(Object.keys(this.user).length);
+    //this.userWords = JSON.parse(localStorage.getItem('userWords')?.toString() || '[]');
 
     const hash = window.location.hash.slice(1);
 

@@ -85,7 +85,7 @@ export class SprintController extends BaseController {
     this.container.appendChild(this.wrapper);
   }
 
-  showPageResultSprint() {
+  showPageResultSprint = async () => {
     this.wrapper.innerHTML = '';
 
     this.wrapper.innerHTML = this.view.getPageResult(
@@ -112,9 +112,11 @@ export class SprintController extends BaseController {
     this.addPlayWordHandler();
 
     if (this.model.isAuthorized) {
-      this.model.updateStatistics(this.correctAnswers, this.incorrectAnswers);
+      await this.model.updateStatistics(this.correctAnswers, true);
+      await this.model.updateStatistics(this.incorrectAnswers, false);
+      await this.model.getUserWords();
     }
-  }
+  };
 
   bindLevelSelection() {
     const btnSelection = document.querySelector('.level_button_container') as HTMLElement;

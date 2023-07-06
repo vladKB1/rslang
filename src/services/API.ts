@@ -55,7 +55,7 @@ export interface Word {
 
 export type RequestData = User | Query[];
 
-export const baseUrl = 'https://react-learnwords-example.herokuapp.com';
+export const baseUrl = 'https://rs-lang-vladkb1-db74e8c9fd98.herokuapp.com';
 
 const path = {
   users: '/users',

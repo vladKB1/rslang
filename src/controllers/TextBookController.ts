@@ -28,7 +28,7 @@ export class TextBookController extends BaseController {
 
   handleAddWordStatus = (): UserWordData[] => {
     const map = new Map();
-    this.model.userWords.forEach((userWord) => map.set(userWord.wordId, userWord));
+    this.model.userWords?.forEach((userWord) => map.set(userWord.wordId, userWord));
 
     return this.model.words.map((word) => {
       if (map.has(word.id)) {

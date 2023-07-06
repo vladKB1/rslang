@@ -103,6 +103,7 @@ export default class App {
         this.model = await new TextBookModel(category, page);
         if (category && page) {
           await (this.model as TextBookModel).getWordsForCategory(category as number, page as number);
+          await this.model.getUserWords();
         }
         this.view = new TextBookView((this.model as TextBookModel).words, this.model.isAuthorized, category, page);
         this.controller = new TextBookController(this.model as TextBookModel, this.view as TextBookView);
