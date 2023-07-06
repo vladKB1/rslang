@@ -1,0 +1,27 @@
+.footer {
+  height: 7.5vh;
+  background: $footer-background;
+  color: white;
+
+  .footer-container {
+    @include flex(space-between);
+    padding: 10px 30px;
+  }
+
+  .github {
+    @include flex(space-around);
+    width: 70%;
+
+    a {
+      color: white;
+    }
+  }
+
+  .rs-school-logo-img {
+    background: $not-active-nav;
+    border-radius: 15px;
+    padding: 7px;
+    width: 70px;
+  }
+}
+

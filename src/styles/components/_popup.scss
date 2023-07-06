@@ -1,0 +1,176 @@
+.popup {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  background-color: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px); 
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.5s;
+
+  
+  &:target {
+    opacity: 1;
+    visibility: visible;   
+  }
+
+  .popup__area {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+
+  .popup__body {
+    @include flex(center);
+    min-height: 100%; 
+    padding: 20px 30px; 
+  }
+
+  .popup__content {
+    @include flex();
+    position: relative;
+    max-width: 1024px;
+
+    background-color: white; 
+    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%), 0 4px 12px 0 rgb(0 0 0 / 6%);
+    border-radius: 15px; 
+  }
+
+  .popup__close {
+    position: absolute;  
+    right: 15px; 
+    top: 10px;
+    z-index: 1001;
+
+    font-size: 24px;
+    font-weight: 700;
+
+    cursor: pointer;
+  }
+}
+
+.authorization-popup {
+  .authorization-popup__close {
+    color: $title-color;  
+  }
+  
+  .sign-in-image {    
+    max-width: 63.4%;
+    border-radius: 15px 0 0 15px;
+  }
+
+  .authorization-form {
+    width: 100%;
+    padding: 100px 50px 35px;
+
+    .authorization-form__title {
+      font-size: 30px;
+      padding-bottom: 50px;
+    }
+
+    .authorization-form__input-container {
+      position: relative;
+      width: 100%;            
+      margin-bottom: 40px;
+      border-bottom: 2px solid $text-color;
+
+      .authorization-form__input {        
+        display: block;
+        width: 100%;
+        height: 45px;
+        padding: 0 5px;
+        background: 0 0;
+
+        border: none;
+        font-size: $input-form-font-size;
+        color: black;    
+        
+        &:focus + .focus-place-holder::after {        
+          top: -15px;
+        }
+
+        &:focus + .focus-place-holder::before {
+          width: 100%;
+        }
+      }
+
+      .has-value.authorization-form__input + .focus-place-holder::after {        
+        top: -15px;
+      }
+
+      .has-value.authorization-form__input + .focus-place-holder::before {
+        width: 100%;
+      }
+
+      .focus-place-holder {
+        position: absolute;
+        display: block;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+
+        &::before {
+          content: "";
+          position: absolute;
+          display: block;
+          width: 0;
+          height: 2px;
+          bottom: -2px;
+          left: 0;
+          
+          background: $not-active-button;
+          transition: all 0.5s;
+        }
+
+        &::after {
+          content: attr(data-placeholder);
+          position: absolute;
+          display: block;
+          width: 100%;
+          top: 16px;
+          left: 0;
+          padding-left: 5px;
+
+          color: $text-color;
+          transition: all 0.5s;
+        }        
+      }
+    }        
+
+    .authorization-form__error-text {
+      font-size: $error-text-font-size;
+      color: $error-text-color;
+    }
+
+    .authorization-form__log-in-button,
+    .authorization-form__sign-up-button {
+      width: 100%;
+      margin-top: 20px;
+      font-size: $authorization-button-font-size;
+    }
+  }
+
+  .change-form-container {
+    margin-top: 100px;
+
+    .change-form-container__button {
+      color: $not-active-button;
+      cursor: pointer;
+
+      &:hover {
+        color: $active-button;
+      }
+    }
+  }
+}

@@ -1,0 +1,71 @@
+.mini-games {
+  background-color: $mini-games-section-background;
+  padding-top: 70px;
+  padding-bottom: 50px;
+}
+
+.mini-games-container {
+  @include flex(space-between);
+
+  .mini-games-description {
+    @include flex($direction: column);
+    width: 50%;
+
+    .mini-games-title {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .description {
+      margin-bottom: 20px;
+    }
+  }
+
+  .games {
+    @include flex(center);
+    flex-wrap: wrap;
+    gap: 50px;
+    width: 50%;
+  }
+}
+
+.game-card {
+  position: relative;
+  @include flex($direction: column);
+  width: 250px;
+  height: 250px;
+  padding: 10px;
+  border-radius: 15px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .game-card-title {
+    color: white;
+    margin: 10px 0;
+  }
+
+  .game-card-img {
+    overflow: hidden;
+    max-width: 70%;
+  }
+}
+
+
+.sprint {
+  background-color: $game-sprint-card-background;
+}
+
+.audio-call {
+  background-color: $game-audio-call-card-background;
+  padding-bottom: 0;
+}
+
+.savanna {
+  background-color: $game-savanna-card-background;
+}
+
+.repeating {
+  background-color: $game-repeating-card-background;
+}
